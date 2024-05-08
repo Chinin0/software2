@@ -9,45 +9,34 @@
 
 LenguaStream AI, es un software SaaS, para la Transcripcion y/o Traducción de Conferencia Presencial, Videos y Audio con Inteligencia Artificial.
 
-'''
 
-#structura del proyecto
+## Estructura del proyecto
 Crear: entorno virtual - activar el entorno
 
-crea las carpetas:
-----Proyecto            # nombre de la carpeta
-|_____.env              # variable de entorno donde estarán tus credenciales                                    [realizar primero]
-|_____run.py            # para iniciar el proyecto
-|_____config.py         # donde estarán todas las configuraciones, las cuales dependerán del archivo .env       [realizar segundo]
-|_____parcial           # carpeta del proyecto
-|________controllers    # controlleras
-|________database       # 
-|________models         # Modelos para migrar a gestor de base de datos Postgres                                [realizar cuarto]
-|________views          #
-|_______ __init__.py    # creador del proyecto                                                                  [realizar tercero]   
-'''
-
-
 proyecto_flask/
-├── app/
-│   ├── __init__.py
-│   ├── controllers/
+├── Proyecto/                 # carpeta del proyecto
+│   ├── __init__.py           # creador del proyecto                                                                  [realizar tercero]
+│   ├── controllers/          # controlleras
 │   │   ├── auth.py
 │   │   └── user.py
-│   ├── models/
+│   ├── models/               # Modelos para migrar a gestor de base de datos Postgres                                [realizar cuarto]
 │   │   ├── __init__.py
 │   │   └── user.py
-│   ├── routes.py
-│   └── templates/
+│   ├── routers/
+│   │   └── router.py         # Rutas
+│   ├── views/                # Vistas 
+│       ├── static/
+│       ├── templates/
 │       ├── auth/
 │       │   ├── login.html
 │       │   └── register.html
 │       └── base.html
 │       └── user/
 │           └── profile.html
-├── config.py
+├── .env                      # variable de entorno donde estarán tus credenciales                                    [realizar primero]
+├── config.py                 # donde estarán todas las configuraciones, las cuales dependerán del archivo .env       [realizar segundo]
 ├── requirements.txt
-└── run.py
+└── run.py                    # para iniciar el proyecto
 
 
 # instalar
