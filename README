@@ -101,11 +101,19 @@ git checkout nombre
 
 
 --- si queres ver los cambios de otra rama que se haya subido al github, hacer un commit antes si esque has modificado algo
--- traer los cambios 
+-- traer los cambios sin tener ramas,cuando solo tenes la rama Master   
 git pull 
 
 -- traer los cambios de una rama especifica
 git pull origin nombrerama
+
+
+-- subir a master 
+git push -u origin master
+
+-- subir a la rama nombre 
+git push -u origin ramanombre
+
 
 
 
