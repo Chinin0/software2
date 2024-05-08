@@ -1,11 +1,19 @@
-#Pasos para crear el proyecto
+<div align="center">
+  <h1 align="center">
+    LenguaStream AI
+    
+    <br />
+    <br />
+      <img src="https://cso.computerworld.es/archivos/202210/deeplearning-emociones-voz.jpg" >
+    </a>
+  </h1>
+</div>
 
-=======
-; chinin estuvo aquí  
-; nuevamente  
 
-modifique github jisan
-otra vez
+## Introducción
+
+LenguaStream AI, es un software SaaS, para la Transcripcion y/o Traducción de Conferencia Presencial, Videos y Audio con Inteligencia Artificial.
+
 '''
 
 #structura del proyecto
