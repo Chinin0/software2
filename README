@@ -4,7 +4,7 @@
 
 LenguaStream AI, es un software SaaS, para la Transcripcion y/o Traducción de Conferencia Presencial, Videos y Audio con Inteligencia Artificial.
 
-<hr/>
+
 
 ## Estructura del proyecto
 
@@ -33,7 +33,7 @@ software/
 ├── requirements.txt
 └── run.py                     para iniciar el proyecto
 
-<hr/>
+
 ----
 
 ## Entorno Virtual
@@ -46,7 +46,7 @@ pip install -r requirements.txt
 
 Paso no necesario hacerlo porque si ya instalaste los requirements.txt : pip install Flask Flask-SQLAlchemy Flask-Migrate psycopg2 python-dotenv
 
-<hr/>
+
 ----
 
 ## Migrar a la base de datos Postgres
@@ -58,7 +58,7 @@ flask db migrate -m "Crea la tabla Usuarios"
 
 flask db upgrade
 
-<hr/>
+
 ----
 
 ## Uso de Git y Github para subir sus cambios al repositorio
@@ -84,7 +84,7 @@ subir a la rama master, esto se utiliza para subir los cambios al github, revisa
 git push -u origin master
 
 
-<hr/>
+
 ----
 
 ## Ramas del Proyecto
@@ -97,7 +97,7 @@ git branch nombre_rama
 cambiar de la rama nombre
 git checkout nombre_rama
 
-<hr/>
+
 ----
 
 Si queres ver los cambios de otra rama que se haya subido al github, hacer un commit antes si esque has modificado algo.
@@ -120,7 +120,7 @@ Subir a la rama especifica nombre_rama
 git push -u origin nombre_rama
 
 
-<hr/>
+
 ----
 
 Ver los registros de los cambios realizados
@@ -134,4 +134,3 @@ Crear un archivo para ingonar archivos especificos pones el nombre ya se de las 
 Revertir cambios de los archivos realizado 
 git checkout --
 
-<hr/>
