@@ -101,7 +101,7 @@ git checkout nombre
 
 
 --- si queres ver los cambios de otra rama que se haya subido al github, hacer un commit antes si esque has modificado algo
--- traer los cambios sin trabajar con ramas
+-- traer los cambios 
 git pull 
 
 -- traer los cambios de una rama especifica
