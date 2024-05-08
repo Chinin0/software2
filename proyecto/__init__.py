@@ -9,7 +9,7 @@ app = Flask(__name__,static_folder = BaseConfig.STATIC_FOLDER, template_folder =
 
 app.config.from_object('config.DevConfig')  # traigo las configuraciones de DevConfig
 
-from parcial.models.modelo import db       # importo el db para poder migrar a la base de datos
+from proyecto.models.modelo import db       # importo el db para poder migrar a la base de datos
 
 migrate = Migrate(app, db)                  # realiza las migraciones
 
