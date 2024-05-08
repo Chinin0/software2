@@ -1,7 +1,10 @@
 #Pasos para crear el proyecto
 
-prueba de github jisan
+=======
+; chinin estuvo aquí  
+; nuevamente  
 
+modifique github jisan
 '''
 
 #structura del proyecto
@@ -82,7 +85,7 @@ git commit -m "comentario de lo que realizaste"
 --- subir a repositorio esto se hace una vez 
 git remote add origin https://nombredelrepositorio.git
 
---subir a la rama master, esto se utiliza para subir la primera vez cuando tu repositorio esta en blanco
+--subir a la rama master, esto se utiliza para subir los cambios al github, revisa la rama a la cual vas a enviar los cambios
 git push -u origin master
 
 
@@ -97,6 +100,24 @@ git branch nombre
 
 - cambiar de la rama nombre
 git checkout nombre
+
+
+
+--- si queres ver los cambios de otra rama que se haya subido al github, hacer un commit antes si esque has modificado algo
+-- traer los cambios sin tener ramas,cuando solo tenes la rama Master   
+git pull 
+
+-- traer los cambios de una rama especifica
+git pull origin nombrerama
+
+
+-- subir a master 
+git push -u origin master
+
+-- subir a la rama nombre 
+git push -u origin ramanombre
+
+
 
 
 --ver los registros de los cambios realizados
