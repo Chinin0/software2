@@ -111,6 +111,11 @@ git pull
 -- traer los cambios de una rama especifica
 git pull origin nombrerama
 
+-- unir los cambios de tu rama con tu rama master para subir al github
+
+git checkout master
+
+git merge nombrerama
 
 -- subir a master 
 git push -u origin master
