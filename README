@@ -1,17 +1,20 @@
+# LenguaStream AI
+
 ## Introducción
 
 LenguaStream AI, es un software SaaS, para la Transcripcion y/o Traducción de Conferencia Presencial, Videos y Audio con Inteligencia Artificial.
 
+<hr/>
 
 ## Estructura del proyecto
 
 software/
 ├── Proyecto/                  carpeta del proyecto
-│   ├── __init__.py            creador del proyecto                                                                  realizar tercero
+│   ├── __init__.py            creador del proyecto                                         realizar tercero
 │   ├── controllers/           controlleras
 │   │   ├── auth.py
 │   │   └── user.py
-│   ├── models/                Modelos para migrar a gestor de base de datos Postgres                                realizar cuarto
+│   ├── models/                Modelos para migrar a gestor de base de datos Postgres       realizar cuarto
 │   │   ├── __init__.py
 │   │   └── user.py
 │   ├── routers/
@@ -25,11 +28,12 @@ software/
 │       └── base.html
 │       └── user/
 │           └── profile.html
-├── .env                       variable de entorno donde estarán tus credenciales                                    realizar primero
-├── config.py                  donde estarán todas las configuraciones, las cuales dependerán del archivo .env       realizar segundo
+├── .env                       variable de entorno donde estarán tus credenciales            realizar primero
+├── config.py                  configuraciones, las cuales dependerán del archivo .env       realizar segundo
 ├── requirements.txt
 └── run.py                     para iniciar el proyecto
 
+<hr/>
 ----
 
 ## Entorno Virtual
@@ -42,6 +46,7 @@ pip install -r requirements.txt
 
 Paso no necesario hacerlo porque si ya instalaste los requirements.txt : pip install Flask Flask-SQLAlchemy Flask-Migrate psycopg2 python-dotenv
 
+<hr/>
 ----
 
 ## Migrar a la base de datos Postgres
@@ -53,9 +58,10 @@ flask db migrate -m "Crea la tabla Usuarios"
 
 flask db upgrade
 
+<hr/>
 ----
 
-# Uso de Git y Github para subir sus cambios al repositorio
+## Uso de Git y Github para subir sus cambios al repositorio
 
 git init
 git status
@@ -78,7 +84,7 @@ subir a la rama master, esto se utiliza para subir los cambios al github, revisa
 git push -u origin master
 
 
-
+<hr/>
 ----
 
 ## Ramas del Proyecto
@@ -91,6 +97,7 @@ git branch nombre_rama
 cambiar de la rama nombre
 git checkout nombre_rama
 
+<hr/>
 ----
 
 Si queres ver los cambios de otra rama que se haya subido al github, hacer un commit antes si esque has modificado algo.
@@ -113,7 +120,7 @@ Subir a la rama especifica nombre_rama
 git push -u origin nombre_rama
 
 
-
+<hr/>
 ----
 
 Ver los registros de los cambios realizados
@@ -127,3 +134,4 @@ Crear un archivo para ingonar archivos especificos pones el nombre ya se de las 
 Revertir cambios de los archivos realizado 
 git checkout --
 
+<hr/>
