@@ -1,13 +1,8 @@
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 
 # importamos los controladores de Usuario
-
-
 # importamos los Modelos de usuario
-
-
 home = Blueprint("views",__name__)
-
 #----------------------HOME------------------------------
 #funciones decoradas, (para que puedan ser usadas en otro archivo)
 @home.route('/', methods =['GET'])
@@ -22,14 +17,11 @@ def login():
         return redirect(url_for('views.dashboard')) #redirige dashboard que corresponde
     else:
         return render_template("login.html")
-
+    
 @home.route('/dashboard', methods =['GET', 'POST'])
-
 def dashboard():
     if request.method == 'GET':
-        return render_template('dashboard.html')
-
-        
+        return render_template('dashboard.html')        
 
 @home.route('/register', methods =['GET', 'POST'])
 def register():
