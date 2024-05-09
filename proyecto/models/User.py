@@ -1,6 +1,3 @@
-'''
-ejemplo del modelo
-
 from werkzeug.security import check_password_hash,generate_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -10,7 +7,7 @@ db = SQLAlchemy(app)        # creamos una instancia
 
 
 # Define el modelo de datos Usuario
-class Usuario(db.Model):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
@@ -30,4 +27,3 @@ class Usuario(db.Model):
         return check_password_hash(self.password_hash, password)
 
 
-'''

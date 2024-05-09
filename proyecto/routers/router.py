@@ -1,7 +1,11 @@
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 
 # importamos los controladores de Usuario
+from ..controllers import UserController
+
 # importamos los Modelos de usuario
+from ..models.User import User
+
 home = Blueprint("views",__name__)
 #----------------------HOME------------------------------
 #funciones decoradas, (para que puedan ser usadas en otro archivo)
