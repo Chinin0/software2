@@ -35,6 +35,8 @@ def dashboard():
 def register():
     if request.method == 'GET':
         return render_template('register.html')
+    
+    
 '''
     if request.method == 'POST':
         name = request.form['name']
