@@ -32,7 +32,7 @@ def login():
                 session['usuario_id'] = logged_user.id
                 session['email'] = logged_user.email
                 session['password'] = logged_user.password_hash 
-                return redirect(url_for('views.prueba')) #redirige dashboard que corresponde
+                return redirect(url_for('views.dashboard')) #redirige dashboard que corresponde
             else:
                 flash("Usuario o Contraseña invalida")           # Contraseña invalida
                 return render_template("login.html")
@@ -81,6 +81,6 @@ def register():
 
 
 
-@home.route('/prueba')
+@home.route('/dashboard')
 def prueba():
-    return render_template('prueba.html')
+    return render_template('dashboard.html')
