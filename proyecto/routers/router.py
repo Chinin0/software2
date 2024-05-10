@@ -1,8 +1,7 @@
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
-
+from datetime import datetime
 # importamos los controladores de Usuario
 from ..controllers import UserController
-
 # importamos los Modelos de usuario
 from ..models.User import User
 
@@ -15,79 +14,65 @@ def home_():
 
 @home.route('/login', methods =['GET', 'POST'])
 def login():
+    # si el metodo es post, es decir, si se envio el formulario
     if request.method == 'POST':
         data = request.form     #guardo todos los datos ingresados por formulario de la vista
-        print('------datos ingresados por formulario-------')  
-        return redirect(url_for('views.dashboard')) #redirige dashboard que corresponde
+        print('------datos ingresados por formulario-------')
+        usuario = User(0,data['email'],data['password'],0)  # capturo los datos del formulario y mando al modelo User
+                                                            # los 0 son nulos porque no metemos desde formulario
+
+        logged_user = UserController.login(usuario)
+        print('datos del login')
+        print(logged_user)
+        # si el usuario existe
+        if logged_user != None:
+            if logged_user.password_hash:
+                # guardamos los datos del usuario en la sesion
+                session['esta_logeado'] = True
+                session['usuario_id'] = logged_user.id
+                session['email'] = logged_user.email
+                session['password'] = logged_user.password_hash 
+                return redirect(url_for('views.dashboard')) #redirige dashboard que corresponde
+            else:
+                flash("Usuario o Contraseña invalida")           # Contraseña invalida
+                return render_template("login.html")
+        else:
+            flash("Usuario o Contraseña invalida")             # Usuario no encontrado
+            return render_template("login.html") 
     else:
-        return render_template("login.html")
-    
+        return render_template("login.html") 
+
+
+
 @home.route('/dashboard', methods =['GET', 'POST'])
 def dashboard():
-    if request.method == 'GET':
+    if 'Esta_logeado' in session:
+
         return render_template('dashboard.html')        
+    else:
+        return render_template("login.html") 
+
+
+
+
 
 @home.route('/register', methods =['GET', 'POST'])
 def register():
-    if request.method == 'GET':
-        return render_template('register.html')
-    
-    
-'''
-    if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        password = request.form['password']
-
-        if not name or not email or not password:
-            return render_template('register.html', error='Please fill all fields')
-
-        if not is_valid_email(email):
-            return render_template('register.html', error='Invalid email format')
-
-        if not is_strong_password(password):
-            return render_template('register.html', error='Password must be strong')
-
-        existing_user = Usuario.query.filter_by(email=email).first()
-        if existing_user:
-            return render_template('register.html', error='Email already registered')
-
-        new_user = Usuario(name=name, email=email, password=password)
-        db.session.add(new_user)
-        db.session.commit()
-
-        return render_template('register.html', success='Registration successful!')
+    time_creacion = datetime.now() # guardamos la fecha y hora en la que se registrará
+    # si el metodo es post, es decir, si se envio el formulario
+    if request.method == "POST":
+        data = request.form
+        print('------datos ingresados por formulario-------')
+        print(data)
+        usuario = User(data['name'],data['email'],data['password'],time_creacion)
+        # capturo los datos del formulario y mando al modelo User
+        # los 0 son nulos porque no metemos desde formulario
 
 
+        UserController.create(usuario)
 
-        # Check for existing email
-        existing_user = Usuario.query.filter_by(email=email).first()
-        if existing_user:
-            return render_template('register.html', error='Email already registered')
+        
+        flash('Usuario registrado con exito')
+        return redirect(url_for('views.login'))
 
-        # Create new user, set password hash, add to session, commit changes
-        new_user = Usuario(name=name, email=email, password=password)
-        db.session.add(new_user)
-        db.session.commit()
-
-        # ... (rest of your registration logic)
-
-def is_valid_email(email):
-    """
-    Validates email format using a regular expression.
-    """
-    email_regex = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
-    return bool(re.match(email_regex, email))
-
-def is_strong_password(password):
-    """
-    Defines minimum requirements for a strong password (you can adjust these).
-    """
-    min_length = 8
-    has_uppercase = any(char.isupper() for char in password)
-    has_lowercase = any(char.islower() for char in password)
-    has_digits = any(char.isdigit() for char in password)
-    has_symbols = any(not char.isalnum() for char in password)
-    return len(password) >= min_length and \
-           has_uppercase and has_lowercase and has_digits and has_symbols
-'''
+    return render_template('register.html')
