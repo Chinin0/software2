@@ -1,0 +1,235 @@
+
+*{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: sans-serif ;
+
+}
+
+h4{
+    font-size: 30px;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.contenedor{
+    width: 90%;
+    max-width: 900px;
+    margin: auto;
+    height: 110vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    box-shadow: 0px 0px 10px 0px lightgrey;
+    margin-bottom: 80px;
+
+    overflow: hidden;
+}
+
+.tabla{
+    width: 33%;
+    height: 600px;
+    margin: auto;
+    border: 1px solid lightgrey;
+    padding: 35px;
+    text-align: start;
+    flex-grow: 1;
+
+    max-width: 300px;
+    overflow: hidden;
+    
+    text-overflow: ellipsis;
+}
+
+
+
+
+
+.tabla>h2{
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+#precio{
+    margin-bottom: 3px;
+}
+
+#userMonth{
+    font-size: 100;
+    color: darkgrey;
+    margin-bottom: 10px;
+}
+
+.tabla>h3{
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.boton{
+    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    background-color: dodgerblue;
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+#enterprise{
+    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgb(0, 0, 69);
+    background-color: white;
+    text-decoration: none;
+    color: black;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 90px;
+}
+
+.tabla>h5{
+    font-size: 12px;
+    margin-bottom: 20px;
+    color: rgb(0, 0, 69);
+}
+
+#tiempo{
+    font-size: 100;
+    margin-bottom: 10px;
+    margin-top: 40px;
+}
+
+#dias{
+    font-size: 100;
+    color: darkgrey;
+    margin-bottom: 10px;
+}
+
+#primerh5{
+    margin-top: 72px;
+}
+
+.tablabasic{
+    width: 90%;
+    height: 430px;
+    margin: auto;
+    border: 1px solid lightgrey;
+    padding: 35px;
+    text-align: start;
+    flex-grow: 1;
+
+    max-width: 900px;
+    overflow: hidden;
+    
+    text-overflow: ellipsis;
+}
+
+.tablabasic>h2{
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.tablabasic>h3{
+    font-size: 17px;
+    margin-bottom: 20px;
+}
+
+.tablabasic>h5{
+    font-size: 12px;
+    margin-bottom: 20px;
+    color: rgb(0, 0, 69);
+}
+
+@media screen and (max-width: 1000px) {
+    .tabla{
+        width: 45%;
+        max-width: none;
+        margin-bottom: 40px;
+        flex-grow: initial;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .tabla{
+        width: 45%;
+        padding: 30px;
+    }
+    .tabla>h2{
+        margin-top: 40px;
+    }
+    .tabla>h3{
+        margin-top: 40px;
+    }
+    .tabla>h5{
+        margin-top: 40px;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .tabla{
+        width: 45%;
+        padding: 20px;
+    }
+}
+
+
+ul{
+    list-style-type: disc;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: rgb(0, 0, 69);
+}
+
+#ulbasic{
+    list-style-type: disc;
+    margin-bottom: 20px;
+    margin-top: 70px;
+    font-size: 12px;
+    color: rgb(0, 0, 69);
+}
+
+#item{
+    margin-top: 10px;
+}
+
+.botonsidebar{
+    display: inline-block;
+    width: 50%;
+    padding: 5px;
+    background-color: none;
+    /*border: 1px solid dodgerblue;*/
+    border: 1px solid white;
+    text-decoration: none;
+    /*color: dodgerblue;*/
+    color: white;
+    border-radius: 9px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-left: 15px;
+}
+
+.minutes{
+    margin-top: 20px;
+    margin-left: 15px;
+}
