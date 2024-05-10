@@ -43,19 +43,6 @@ def login():
         return render_template("login.html") 
 
 
-
-@home.route('/dashboard', methods =['GET', 'POST'])
-def dashboard():
-    if 'Esta_logeado' in session:
-
-        return render_template('dashboard.html')        
-    else:
-        return render_template("login.html") 
-
-
-
-
-
 @home.route('/register', methods =['GET', 'POST'])
 def register():
     time_creacion = datetime.now() # guardamos la fecha y hora en la que se registrará
@@ -76,3 +63,16 @@ def register():
         return redirect(url_for('views.login'))
 
     return render_template('register.html')
+
+
+@home.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+@home.route('/logout')
+def logout():
+    if 'Esta_logeado' in session:  
+        session.pop('Esta_logeado',None)
+        session.pop('name',None)
+        return redirect(url_for('views.home'))
+    return redirect(url_for('views.login'))

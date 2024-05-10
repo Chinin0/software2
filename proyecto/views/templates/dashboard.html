@@ -1,145 +1,18 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Flask</title>
+{% extends "base/base.html" %}
 
-    <link rel="stylesheet" href="styles.css">
+{% block title %} Dashboard 1 {% endblock title %}
 
-</head>
-<body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3 sidebar">
-                <h2 class="sidebar-heading">Usuario: <span id="username"></span>  (Opciones: Salir)</h2>
-                <div class="notifications-container" id="notifications-container">
-                    <span class="notifications-count" id="notifications-count"></span>
-                    <ul class="notifications-list" id="notifications-list">
+{% block stylesheets %}
+{{ super() }}
+{% endblock stylesheets %}
 
-                    </ul>
-                </div>
-                <div class="sidebar-list">
-                    <h3 class="sidebar-heading">Secciones</h3>
-                    <a href="#">Proyectos</a>
-                    <a href="#">Colaboradores</a>
-                </div>
-                <div class="theme-toggle" id="theme-toggle">
-                    <i class="fas fa-sun"></i>
-                </div>
-            </div>
-            <div class="col-md-9 main-content">
-                <div class="diagram-container">
-                    <div id="myDiagram"></div> </div>
-            </div>
-        </div>
-    </div>
+{% block content %}
+<div class="right_col" role="main">
+</div>
+{% endblock content %}
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="https://gojs.net/latest/release/go.js"></script>
-    <script src="https://gojs.net/latest/release/extensions/go.究.js"></script>
-    <script src="https://gojs.net/latest/release/extensions/go.Selection.js"></script>
-    <script>
-        $(document).ready(function() {
-  // Simulate fetching username (replace with actual logic)
-  $("#username").text("John Doe");
+{% block javascripts %}
+{{ super()}}
+<!-- Chart.js -->
 
-  // ... Notifications functionality (same as before)
-
-  // ... Theme toggle functionality (same as before)
-
-  // GOJS Sequence Diagram Logic
-  var $ = go.GraphObject.make;
-
-  var myDiagram =
-    $(go.Diagram, "myDiagram", {
-      "InitialContentAlignment": go.Spot.Center,
-      "LayoutCompleted": function(e) {
-        console.log("Layout completed!");
-      }
-    });
-
-  // Define participants (roles)
-  var participantUser =
-    $(go.Participant, "User", {
-      Location: go.Point(50, 200),
-      Background: "#f0f8ff"
-    });
-
-  var participantServer =
-    $(go.Participant, "Server", {
-      Location: go.Point(250, 200),
-      Background: "#e6f7ff"
-    });
-
-  // Define interactions (messages)
-  var msgRequestUsername =
-    $(go.Message, {
-      Start: participantUser.Port("Username"),
-      End: participantServer.Port("Username"),
-      Stroke: "#000",
-      Value: "Username: johndoe"
-    });
-
-  var msgSendPassword =
-    $(go.Message, {
-      Start: participantUser.Port("Password"),
-      End: participantServer.Port("Password"),
-      Stroke: "#000",
-      Value: "Password: mypassword123"
-    });
-
-  var msgValidateCredentials =
-    $(go.Message, {
-      Start: participantServer.Port("Validate"),
-      End: participantUser.Port("Validation"),
-      Stroke: "#000",
-      Value: "Validate credentials"
-    });
-
-  var msgLoginSuccess =
-    $(go.Message, {
-      Start: participantServer.Port("LoginSuccess"),
-      End: participantUser.Port("Login"),
-      Stroke: "#00a800",
-      Value: "Login successful!"
-    });
-
-  var msgLoginFail =
-    $(go.Message, {
-      Start: participantServer.Port("LoginFail"),
-      End: participantUser.Port("Login"),
-      Stroke: "#dc3545",
-      Value: "Login failed!"
-    });
-
-  // Add participants and interactions to the diagram
-  myDiagram.model.addNode(participantUser);
-  myDiagram.model.addNode(participantServer);
-
-  myDiagram.model.addLink(msgRequestUsername);
-  myDiagram.model.addLink(msgSendPassword);
-  myDiagram.model.addLink(msgValidateCredentials);
-  myDiagram.model.addLink(msgLoginSuccess);
-  myDiagram.model.addLink(msgLoginFail);
-
-  // Define link labels (optional)
-  myDiagram.model.linkRelabelRule = function(link) {
-    if (link.data.Value) {
-      return link.data.Value;
-    } else {
-      return "";
-    }
-  };
-
-  // Set layout type (optional)
-  myDiagram.layout = $(go.LayeredLayout);
-
-  // Enable zoom and panning (optional)
-  myDiagram.toolManager.installTool("ZoomTool");
-  myDiagram.toolManager.installTool("PanTool");
-});
-    </script>
-</body>
-</html>
+{% endblock javascripts %}
