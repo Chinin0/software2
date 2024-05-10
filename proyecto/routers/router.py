@@ -68,3 +68,11 @@ def register():
 @home.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html')
+
+@home.route('/logout')
+def logout():
+    if 'Esta_logeado' in session:  
+        session.pop('Esta_logeado',None)
+        session.pop('name',None)
+        return redirect(url_for('views.home'))
+    return redirect(url_for('views.login'))
