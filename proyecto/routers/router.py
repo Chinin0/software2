@@ -54,11 +54,7 @@ def register():
         usuario = User(data['name'],data['email'],data['password'],time_creacion)
         # capturo los datos del formulario y mando al modelo User
         # los 0 son nulos porque no metemos desde formulario
-
-
         UserController.create(usuario)
-
-        
         flash('Usuario registrado con exito')
         return redirect(url_for('views.login'))
 
@@ -76,3 +72,17 @@ def logout():
         session.pop('name',None)
         return redirect(url_for('views.home'))
     return redirect(url_for('views.login'))
+
+@home.route('/plans/')
+def plans():
+    return render_template("plans.html")
+
+
+@home.route('/card/')
+def card():
+    return render_template("card.html")
+
+
+@home.route('/cardBusiness/')
+def cardBusiness():
+    return render_template("cardBusiness.html")
