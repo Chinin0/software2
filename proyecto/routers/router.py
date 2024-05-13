@@ -28,7 +28,7 @@ def login():
         if logged_user != None:
             if logged_user.password_hash:
                 # guardamos los datos del usuario en la sesion
-                session['esta_logeado'] = True
+                session['Esta_logeado'] = True  #Variable para saber si el usuario esta logeado 
                 session['usuario_id'] = logged_user.id
                 session['email'] = logged_user.email
                 session['password'] = logged_user.password_hash 
@@ -43,19 +43,6 @@ def login():
         return render_template("login.html") 
 
 
-
-@home.route('/dashboard', methods =['GET', 'POST'])
-def dashboard():
-    if 'Esta_logeado' in session:
-
-        return render_template('dashboard.html')        
-    else:
-        return render_template("login.html") 
-
-
-
-
-
 @home.route('/register', methods =['GET', 'POST'])
 def register():
     time_creacion = datetime.now() # guardamos la fecha y hora en la que se registrará
@@ -67,20 +54,37 @@ def register():
         usuario = User(data['name'],data['email'],data['password'],time_creacion)
         # capturo los datos del formulario y mando al modelo User
         # los 0 son nulos porque no metemos desde formulario
-
-
         UserController.create(usuario)
-
-        
         flash('Usuario registrado con exito')
         return redirect(url_for('views.login'))
 
     return render_template('register.html')
 
 
+@home.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+@home.route('/logout')
+def logout():
+    if 'Esta_logeado' in session:  # Si el usuario esta logeado entonces realiza funcionalidades permitidas 
+        session.pop('Esta_logeado',None)
+        session.pop('name',None)
+        return redirect(url_for('views.home_'))
+    return redirect(url_for('views.login'))
+
+@home.route('/plans/')
+def plans():
+    if 'Esta_logeado' in session:   # Si el usuario esta logeado entonces realiza funcionalidades permitidas 
+        return render_template("plans.html")
+    return redirect(url_for('views.login'))
 
 
+@home.route('/card/')
+def card():
+    return render_template("card.html")
 
-@home.route('/prueba')
-def prueba():
-    return render_template('prueba.html')
+
+@home.route('/cardBusiness/')
+def cardBusiness():
+    return render_template("cardBusiness.html")
