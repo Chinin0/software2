@@ -32,7 +32,7 @@ def login():
                 session['usuario_id'] = logged_user.id
                 session['email'] = logged_user.email
                 session['password'] = logged_user.password_hash 
-                return redirect(url_for('views.dashboard')) #redirige dashboard que corresponde
+                return redirect(url_for('views.dashboard')) #redirige dashboard que corresponde//////chinin estuvo aquí
             else:
                 flash("Usuario o Contraseña invalida")           # Contraseña invalida
                 return render_template("login.html")
