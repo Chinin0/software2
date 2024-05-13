@@ -28,7 +28,7 @@ def login():
         if logged_user != None:
             if logged_user.password_hash:
                 # guardamos los datos del usuario en la sesion
-                session['esta_logeado'] = True
+                session['Esta_logeado'] = True  #Variable para saber si el usuario esta logeado 
                 session['usuario_id'] = logged_user.id
                 session['email'] = logged_user.email
                 session['password'] = logged_user.password_hash 
@@ -67,15 +67,17 @@ def dashboard():
 
 @home.route('/logout')
 def logout():
-    if 'Esta_logeado' in session:  
+    if 'Esta_logeado' in session:  # Si el usuario esta logeado entonces realiza funcionalidades permitidas 
         session.pop('Esta_logeado',None)
         session.pop('name',None)
-        return redirect(url_for('views.home'))
+        return redirect(url_for('views.home_'))
     return redirect(url_for('views.login'))
 
 @home.route('/plans/')
 def plans():
-    return render_template("plans.html")
+    if 'Esta_logeado' in session:   # Si el usuario esta logeado entonces realiza funcionalidades permitidas 
+        return render_template("plans.html")
+    return redirect(url_for('views.login'))
 
 
 @home.route('/card/')
