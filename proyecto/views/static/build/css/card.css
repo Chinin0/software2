@@ -1,22 +1,25 @@
-body {
-    margin: 0;
+*{
+    margin:0;
     padding: 0;
-    background-color: #f9f9f9;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    box-sizing: border-box;
+}
+body {
+    font-family: sans-serif ;
+}
+.contenedor{
+    width: 100%;
+    max-width: 100%;
+    margin: auto;
+    height: 110vh;
     display: flex;
-    -ms-flex-line-pack: center;
-        align-content: center;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    min-height: 100vh;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-    font-family: 'Raleway';
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    box-shadow: 0px 0px 10px 0px lightgrey;
+    margin-bottom: 80px;
+
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 .payment-title {
@@ -57,7 +60,7 @@ abbr{
 .form-container{
     border-radius: 10px;
     box-shadow: 0px 0px 15px 0px lightslategrey;
-    margin-top: 30px;
+    margin-left: 500px;
 }
 
 .form-container .field-container:first-of-type {
@@ -155,13 +158,7 @@ input {
     -o-transition: none !important;
 }
 
-.container {
-    width: 100%;
-    max-width: 400px;
-    max-height: 251px;
-    height: 54vw;
-    padding: 20px;
-}
+
 
 #ccsingle {
     position: absolute;
@@ -177,6 +174,8 @@ input {
 .creditcard svg#cardfront,
 .creditcard svg#cardback {
     width: 100%;
+    margin-top: 15%;
+    margin-left: 130px;
     -webkit-box-shadow: 1px 5px 6px 0px black;
     box-shadow: 1px 5px 6px 0px black;
     border-radius: 22px;
@@ -420,21 +419,126 @@ input {
     transform: rotateY(180deg);
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1300px) {
+    .creditcard{
+        position: relative;
+        left: 20%;
+    }
+
+    .form-container{
+        max-width: 400px;
+        position: relative;
+        top: 300px;
+        right: 22%;
+        margin-left: 500px;
+        margin-top: 5%;
+        margin-bottom: 40%;
+        
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .creditcard{
+        position: relative;
+        left: 50px;
+    }
+
+    .form-container{
+        max-width: 400px;
+        position: relative;
+        top: 300px;
+        right: 22%;
+        margin-left: 330px;
+        margin-top: 5%;
+        margin-bottom: 40%;
+        
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .creditcard{
+        position: relative;
+        margin-left: -50px;
+    }
+
+    .form-container{
+        max-width: 400px;
+        position: relative;
+        top: 300px;
+        right: 22%;
+        margin-left: 40%;
+        margin-top: 5%;
+        margin-bottom: 50%;
+        
+    }
+}
+
+@media screen and (max-width: 730px) {
+    .creditcard{
+        position: relative;
+        margin-left: -50px;
+    }
+
+    .form-container{
+        max-width: 400px;
+        position: relative;
+        top: 300px;
+        right: 22%;
+        margin-left: 40%;
+        margin-top: 5%;
+        margin-bottom: 50%;
+        
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .creditcard{
+        position: relative;
+        margin-left: -170px;
+    }
+
+    .form-container{
+        max-width: 400px;
+        position: relative;
+        top: 300px;
+        right: 22%;
+        margin-left: 35%;
+        margin-top: 5%;
+        margin-bottom: 50%;
+        
+    }
+}
+
+
+
+/* @media screen and (max-width: 1000px) {
     .tabla{
         width: 45%;
         max-width: none;
         margin-bottom: 40px;
         flex-grow: initial;
     }
-}
 
-@media screen and (max-width: 1000px) {
+    .creditcard{
+        width: 45%;
+        max-width: none;
+        margin-bottom: 40px;
+    }
+
     .form-container{
         width: 70%;
         max-width: none;
         margin-bottom: 40px;
         flex-grow: initial;
     }
-}
+} */
+
+/* @media screen and (max-width: 1000px) {
+    .form-container{
+        width: 70%;
+        max-width: none;
+        margin-bottom: 40px;
+        flex-grow: initial;
+    }
+} */
 
