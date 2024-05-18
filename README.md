@@ -5,7 +5,6 @@
 LenguaStream AI, es un software SaaS, para la Transcripcion y/o Traducción de Conferencia Presencial, Videos y Audio con Inteligencia Artificial.
 
 
-
 ## Estructura del proyecto
 
 software/
