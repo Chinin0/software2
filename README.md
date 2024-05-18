@@ -49,11 +49,8 @@ software/
 │           └── profile.html
 
 ├── .env                       variable de entorno donde estarán tus credenciales            realizar primero
-
 ├── config.py                  configuraciones, las cuales dependerán del archivo .env       realizar segundo
-
 ├── requirements.txt
-
 └── run.py                     para iniciar el proyecto
 
 
