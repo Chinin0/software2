@@ -9,29 +9,53 @@ LenguaStream AI, es un software SaaS, para la Transcripcion y/o Traducción de C
 ## Estructura del proyecto
 
 software/
+
 ├── Proyecto/                  carpeta del proyecto
+
 │   ├── __init__.py            creador del proyecto                                         realizar tercero
+
 │   ├── controllers/           controlleras
+
 │   │   ├── auth.py
+
 │   │   └── user.py
+
 │   ├── models/                Modelos para migrar a gestor de base de datos Postgres       realizar cuarto
+
 │   │   ├── __init__.py
+
 │   │   └── user.py
+
 │   ├── routers/
+
 │   │   └── router.py          Rutas
+
 │   ├── views/                 Vistas 
+
 │       ├── static/
+
 │       ├── templates/
+
 │       ├── auth/
+
 │       │   ├── login.html
+
 │       │   └── register.html
+
 │       └── base.html
+
 │       └── user/
+
 │           └── profile.html
+
 ├── .env                       variable de entorno donde estarán tus credenciales            realizar primero
+
 ├── config.py                  configuraciones, las cuales dependerán del archivo .env       realizar segundo
+
 ├── requirements.txt
+
 └── run.py                     para iniciar el proyecto
+
 
 
 ----
