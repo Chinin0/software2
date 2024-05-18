@@ -70,6 +70,7 @@ git add .
 esto solo se hace la primera vez
 
 git config --global user.email "aquituemail@algo.com"
+
 git config --global user.name "aquitunombredesuario"
 
 
