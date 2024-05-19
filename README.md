@@ -23,7 +23,7 @@ software/
 │   ├── views/ 
 │       └── static/  
 │       └── templates/  
-│   ├── __init__.py 
+│   ├── __init__.py  
 ├── .env.example  
 ├── .gitignore  
 ├── README.md  
@@ -31,35 +31,6 @@ software/
 ├── run.py  
 ├── requirements.txt  
 ├── config 
-
-
-myapp/  
-
-├── config  
-│   ├── config.cfg  
-│   └── test.py  
-├── static   
-|   ├── css  
-|   │   └── loquesea.css  
-|   └── js  
-|       └── loquesea.js  
-├── __init__.py  
-├── productos  
-│   ├── __init__.py  
-│   ├── routes.py  
-│   ├── static   
-│   └── templates  
-│       ├── formulario-producto.html  
-│       └── productos.html  
-├── proveedores  
-   ├── __init__.py  
-   ├── models.py  
-   ├── routes.py  
-   └── templates  
-        ├── Formulario.html  
-        └── Proveedores.html 
-
-
 
 
 
