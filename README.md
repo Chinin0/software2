@@ -12,10 +12,17 @@ software/
 ├── proyecto/  
 │   ├── controllers/  
 │       └── UserController.py  
-│   ├── database/ 
-│   ├── models/ 
-│   ├── routers/ 
+│   ├── database/  
+│       └── connection.py  
+│       └── usuario_db.py  
+│   ├── models/  
+│       └── User.py  
+│   ├── routers/  
+│       └── __init__.py  
+│       └── router.py  
 │   ├── views/ 
+│       └── static/  
+│       └── templates/  
 │   ├── __init__.py 
 ├── .env.example  
 ├── .gitignore  
@@ -23,8 +30,7 @@ software/
 ├── config.py  
 ├── run.py  
 ├── requirements.txt  
-├── config  
-
+├── config 
 
 
 myapp/  
