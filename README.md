@@ -12,6 +12,9 @@ software/
 ├── Proyecto/
 ├── config  
 ├── config 
+├── config 
+├── config 
+├── config 
 ├── __init__.py            creador del proyecto                                         realizar tercero
 
 │   ├── controllers/           controlleras
