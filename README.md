@@ -8,10 +8,10 @@ LenguaStream AI, es un software SaaS, para la Transcripcion y/o Traducción de C
 
 ## Estructura del proyecto
 
-software/ 
-├── proyecto/ 
-│   ├── controllers/ 
-│   	└── UserController.py
+software/  
+├── proyecto/  
+│   ├── controllers/  
+│       └── UserController.py  
 │   ├── database/ 
 │   ├── models/ 
 │   ├── routers/ 
