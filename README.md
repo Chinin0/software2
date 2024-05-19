@@ -4,6 +4,7 @@
 
 LenguaStream AI, es un software SaaS, para la Transcripcion y/o Traducción de Conferencia Presencial, Videos y Audio con Inteligencia Artificial.
 
+<hr/>
 
 ## Estructura del proyecto
 
@@ -61,11 +62,11 @@ software/
 
 ## Entorno Virtual, en caso que no tenga instalado el virtual instalar con el comando: pip install virtualenv
 
-python -m virtualenv env
+`python -m virtualenv env`
 
-.\env\Scripts\activate.bat
+`.\env\Scripts\activate.bat`
 
-pip install -r requirements.txt
+`pip install -r requirements.txt`
 
 Paso no necesario hacerlo porque si ya instalaste los requirements.txt : pip install Flask Flask-SQLAlchemy Flask-Migrate psycopg2 python-dotenv
 
@@ -75,20 +76,23 @@ Paso no necesario hacerlo porque si ya instalaste los requirements.txt : pip ins
 ## Migrar a la base de datos Postgres
 
 
-flask db init
+`flask db init`
 
-flask db migrate -m "Crea la tabla Usuarios"
+`flask db migrate -m "Crea la tabla Usuarios"`
 
-flask db upgrade
+`flask db upgrade`
 
 
 ----
 
 ## Uso de Git y Github para subir sus cambios al repositorio
 
-git init
-git status
-git add .
+`git init`
+
+`git status`
+
+`git add .`
+
 
 esto solo se hace la primera vez
 
@@ -97,7 +101,7 @@ git config --global user.email "aquituemail@algo.com"
 git config --global user.name "aquitunombredesuario"
 
 
-git commit -m "comentario de lo que realizaste"
+`git commit -m "comentario de lo que realizaste"`
 
 
 subir a repositorio esto se hace la primera vez despues ya no.
@@ -105,7 +109,8 @@ git remote add origin https://nombredelrepositorio.git
 
 
 subir a la rama master, esto se utiliza para subir los cambios al github, revisa la rama a la cual vas a enviar los cambios
-git push -u origin master
+
+`git push -u origin master`
 
 
 
@@ -113,42 +118,42 @@ git push -u origin master
 
 ## Ramas del Proyecto
 
-git branch
+`git branch`
 
 crear una rama en el repositorio, nombre_rama
-git branch nombre_rama
+`git branch nombre_rama`
 
 cambiar de la rama nombre
-git checkout nombre_rama
+`git checkout nombre_rama`
 
 
 ----
 
 Si queres ver los cambios de otra rama que se haya subido al github, hacer un commit antes si esque has modificado algo.
 Traer los cambios sin tener ramas,cuando solo tenes la rama Master.   
-git pull 
+`git pull` 
 
 Traer los cambios de una rama especifica nombre_rama
-git pull origin nombre_rama
+`git pull origin nombre_rama`
 
 Unir los cambios de tu rama con tu rama master para subir al github
 
-git checkout master
+`git checkout master`
 
-git merge nombre_rama
+`git merge nombre_rama`
 
 Subir a la rama master 
-git push -u origin master
+`git push -u origin master`
 
 Subir a la rama especifica nombre_rama
-git push -u origin nombre_rama
+`git push -u origin nombre_rama`
 
 
 
 ----
 
 Ver los registros de los cambios realizados
-git log
+`git log`
 
 Crear un archivo para ingonar archivos especificos pones el nombre ya se de las capetas o archivos dentro
 
@@ -156,5 +161,6 @@ Crear un archivo para ingonar archivos especificos pones el nombre ya se de las 
 
 
 Revertir cambios de los archivos realizado 
-git checkout --
+
+`git checkout --`
 
