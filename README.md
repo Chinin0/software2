@@ -57,6 +57,35 @@ software/
 
 
 
+myapp/  
+├── config  
+│   ├── config.cfg  
+│   └── test.py  
+├── static   
+|   ├── css  
+|   │   └── loquesea.css  
+|   └── js  
+|       └── loquesea.js  
+├── __init__.py  
+├── productos  
+│   ├── __init__.py  
+│   ├── routes.py  
+│   ├── static   
+│   └── templates  
+│       ├── formulario-producto.html  
+│       └── productos.html  
+├── proveedores  
+   ├── __init__.py  
+   ├── models.py  
+   ├── routes.py  
+   └── templates  
+        ├── Formulario.html  
+        └── Proveedores.html 
+
+
+
+
+
 ----
 
 ## Entorno Virtual, en caso que no tenga instalado el virtual instalar con el comando: pip install virtualenv
