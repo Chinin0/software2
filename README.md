@@ -20,7 +20,7 @@ software/
 │   ├── routers/  
 │       └── __init__.py  
 │       └── router.py  
-│   ├── views/ 
+│   ├── views/  
 │       └── static/  
 │       └── templates/  
 │   ├── __init__.py  
