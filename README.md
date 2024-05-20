@@ -10,7 +10,7 @@ LenguaStream AI, es un software SaaS, para la Transcripcion y/o Traducción de C
 
 software/  
 ├── proyecto/  
-│   ├── controllers/  
+│        ├── controllers/  
 │       └── UserController.py  
 │   ├── database/  
 │       └── connection.py  
