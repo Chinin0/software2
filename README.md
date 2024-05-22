@@ -36,13 +36,25 @@ software/
 
 ----
 
-## Entorno Virtual, en caso que no tenga instalado el virtual instalar con el comando: pip install virtualenv
+## Entorno Virtual, en caso que no tenga instalado el virtual instalar con el comando:
+Para windows: pip install virtualenv
 
 `python -m virtualenv env`
 
 `.\env\Scripts\activate.bat`
 
 `pip install -r requirements.txt`
+
+
+Para Linux(ubuntu): pip install virtualenv --break-system-packages
+
+`python3 -m virtualenv env`   o  `virtualenv venv`
+ 
+`source env/bin/activate`
+
+`pip install -r requirements.txt`
+
+
 
 Paso no necesario hacerlo porque si ya instalaste los requirements.txt : pip install Flask Flask-SQLAlchemy Flask-Migrate psycopg2 python-dotenv
 
