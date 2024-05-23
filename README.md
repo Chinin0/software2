@@ -92,11 +92,12 @@ git config --global user.name "aquitunombredesuario"
 `git commit -m "comentario de lo que realizaste"`
 
 
-subir a repositorio esto se hace la primera vez despues ya no.
-git remote add origin https://nombredelrepositorio.git
+subir el proyecto al repositorio github, esto solo lo realizá el que creó el proyecto en github, se hace la primera vez despues ya no.
+
+`git remote add origin` https://nombredelrepositorio.git
 
 
-subir a la rama master, esto se utiliza para subir los cambios al github, revisa la rama a la cual vas a enviar los cambios
+subir los cambios a la rama master del proyecto de github, se recomienda que cada colaborador se creé su propia rama y envié los cambios a su rama propia para que el master confirme dichos cambios.
 
 `git push -u origin master`
 
