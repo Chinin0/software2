@@ -90,3 +90,10 @@ def card():
 @home.route('/cardBusiness/')
 def cardBusiness():
     return render_template("cardBusiness.html")
+
+
+@home.route('/profile/')
+def profile():
+    
+    return render_template("profile.html")
+    #return "PERFIL DE USUARIO"
