@@ -16,6 +16,11 @@ def create(usuario: User) -> User:
     return usuario
 
 
+def update(usuario: User) -> User:
+    sql = """ UPDATE users SET name = '{}' WHERE ID = '{}' """.format(usuario.name, usuario.id)
+    _fetch_none(sql,None)
+
+
 def login(usuario: User) -> User:
     sql = " SELECT name, email, password_hash, create_at FROM users WHERE email = '{}' ".format(usuario.email) #la variable del modelo User
     row = _fetch_one(sql,None)
