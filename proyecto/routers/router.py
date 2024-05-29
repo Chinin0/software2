@@ -126,3 +126,11 @@ def update_profile():
             data = request.form
         return redirect(url_for('perfil'))
     return redirect(url_for('views.login'))
+
+@home.route('/presencial/')
+def presencial():
+    return render_template("presencial.html")
+
+@home.route('/audio/')
+def audio():
+    return render_template("audio.html")
