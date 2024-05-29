@@ -2,6 +2,8 @@
 
 ## Introducción
 
+ejemplo para usar git, crea tu rama con tu nombre ejmplo: franz
+ahora hagamos cammbio en nuestra rama :D 
 LenguaStream AI, es un software SaaS, para la Transcripcion y/o Traducción de Conferencia Presencial, Videos y Audio con Inteligencia Artificial.
 
 <hr/>
