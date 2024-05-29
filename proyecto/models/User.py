@@ -16,6 +16,7 @@ class User(db.Model):
     create_at = db.Column(db.DateTime, default=datetime.now)
     update_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     
+    subscriptions = db.relationship('Subscription', backref='user', lazy=True)
 
     def __init__(self, name, email, password,create_at):
         self.name = name
@@ -28,3 +29,35 @@ class User(db.Model):
     def check_password(self,hashed_password, password_hash):
 
         return check_password_hash(hashed_password, password_hash)
+    
+
+
+
+class Plan(db.Model):
+    __tablename__ = 'plans'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    monthly_price = db.Column(db.Float, nullable=False)
+    
+    subscriptions = db.relationship('Subscription', backref='plan', lazy=True)
+
+class Subscription(db.Model):
+    __tablename__ = 'subscriptions'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    plan_id = db.Column(db.Integer, db.ForeignKey('plans.id'), nullable=False)
+    start_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    end_date = db.Column(db.DateTime, nullable=True)
+    status = db.Column(db.String(50), nullable=False, default='active')
+    
+    payments = db.relationship('Payment', backref='subscription', lazy=True)
+
+class Payment(db.Model):
+    __tablename__ = 'payments'
+    id = db.Column(db.Integer, primary_key=True)
+    subscription_id = db.Column(db.Integer, db.ForeignKey('subscriptions.id'), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    payment_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    payment_method = db.Column(db.String(50), nullable=False)
+    payment_status = db.Column(db.String(50), nullable=False, default='paid')

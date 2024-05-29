@@ -2,6 +2,8 @@
 
 ## Introducción
 
+ejemplo para usar git, crea tu rama con tu nombre ejmplo: franz
+ahora hagamos cammbio en nuestra rama :D 
 LenguaStream AI, es un software SaaS, para la Transcripcion y/o Traducción de Conferencia Presencial, Videos y Audio con Inteligencia Artificial.
 
 <hr/>
@@ -36,13 +38,25 @@ software/
 
 ----
 
-## Entorno Virtual, en caso que no tenga instalado el virtual instalar con el comando: pip install virtualenv
+## Entorno Virtual, en caso que no tenga instalado el virtual instalar con el comando:
+Para windows: pip install virtualenv
 
 `python -m virtualenv env`
 
 `.\env\Scripts\activate.bat`
 
 `pip install -r requirements.txt`
+
+
+Para Linux(ubuntu): pip install virtualenv --break-system-packages
+
+`python3 -m virtualenv env`   o  `virtualenv venv`
+ 
+`source env/bin/activate`
+
+`pip install -r requirements.txt`
+
+
 
 Paso no necesario hacerlo porque si ya instalaste los requirements.txt : pip install Flask Flask-SQLAlchemy Flask-Migrate psycopg2 python-dotenv
 
@@ -80,11 +94,12 @@ git config --global user.name "aquitunombredesuario"
 `git commit -m "comentario de lo que realizaste"`
 
 
-subir a repositorio esto se hace la primera vez despues ya no.
-git remote add origin https://nombredelrepositorio.git
+subir el proyecto al repositorio github, esto solo lo realizá el que creó el proyecto en github, se hace la primera vez despues ya no.
+
+`git remote add origin` https://nombredelrepositorio.git
 
 
-subir a la rama master, esto se utiliza para subir los cambios al github, revisa la rama a la cual vas a enviar los cambios
+subir los cambios a la rama master del proyecto de github, se recomienda que cada colaborador se creé su propia rama y envié los cambios a su rama propia para que el master confirme dichos cambios.
 
 `git push -u origin master`
 

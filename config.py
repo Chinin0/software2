@@ -20,7 +20,7 @@ class DevConfig(BaseConfig):
     DB_PASS = os.environ.get("DB_PASS","") 
     DB_PORT = os.environ.get("DB_PORT","") 
 
-    #Define la cadena de conexión a tu base de datos PostgreSQL.
+    #Define la cadena de conexión a tu base de datos PostgreSQL, importante cambiar la contraseñadel postgres en ubuntu
     #SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:root@localhost:5432/db_diagrama'
     SQLALCHEMY_DATABASE_URI = 'postgresql://'+DB_USER+':'+DB_PASS+'@'+DB_HOST+':'+DB_PORT+'/'+DB_NAME
     #Establece esta opción en False para mejorar el rendimiento.

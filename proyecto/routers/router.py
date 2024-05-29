@@ -29,9 +29,12 @@ def login():
             if logged_user.password_hash:
                 # guardamos los datos del usuario en la sesion
                 session['Esta_logeado'] = True  #Variable para saber si el usuario esta logeado 
+                #obtenemos todo los datos del usuario
                 session['usuario_id'] = logged_user.id
+                session['name'] = logged_user.name
                 session['email'] = logged_user.email
                 session['password'] = logged_user.password_hash 
+                session['create_at'] = logged_user.create_at
                 return redirect(url_for('views.dashboard')) #redirige dashboard que corresponde//////chinin estuvo aquí
             else:
                 flash("Usuario o Contraseña invalida")           # Contraseña invalida
@@ -90,6 +93,39 @@ def card():
 @home.route('/cardBusiness/')
 def cardBusiness():
     return render_template("cardBusiness.html")
+
+
+@home.route('/profile/')
+def profile():
+    if 'Esta_logeado' in session:
+                        # Aqui ponemos Titulo y descripcion 
+        parametros = {  "title": "Bienvenido(a) " + session['name'],
+                        "name":  session['name'] ,
+                        "email": session['email'],
+                        "start_date":session['create_at']
+                    }
+        return render_template("profile.html",**parametros)
+    return redirect(url_for('views.login'))
+
+
+@home.route('/perfil/', methods =['POST','GET'])
+def perfil():
+    if 'Esta_logeado' in session:
+                        # Aqui ponemos Titulo y descripcion 
+        parametros = {  "name":  session['name'] ,
+                        "email": session['email']
+                    }
+        return render_template("editar_perfil.html",**parametros)
+    return redirect(url_for('views.login'))
+
+
+@home.route('/update_profile/', methods =['GET', 'POST'])
+def update_profile():
+    if 'Esta_logeado' in session:
+        if request.method == "POST":
+            data = request.form
+        return redirect(url_for('perfil'))
+    return redirect(url_for('views.login'))
 
 @home.route('/presencial/')
 def presencial():
