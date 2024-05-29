@@ -90,3 +90,11 @@ def card():
 @home.route('/cardBusiness/')
 def cardBusiness():
     return render_template("cardBusiness.html")
+
+@home.route('/presencial/')
+def presencial():
+    return render_template("presencial.html")
+
+@home.route('/audio/')
+def audio():
+    return render_template("audio.html")
