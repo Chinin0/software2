@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Transcriber and Translator</title>
+    <style>
+        /* Estilos CSS */
+    </style>
+</head>
+
+<body>
+    <div class="bg-gray-100 flex items-center justify-center h-screen">
+        <div class="text-center content-center">
+            <div class="upload-button-container">
+                <form action="/upload-video" method="POST" enctype="multipart/form-data">
+                    <label for="videoFile">Selecciona un archivo de video:</label>
+                    <input type="file" id="videoFile" name="videoFile" accept="video/*"><br><br>
+                    <label for="idioma_entrada">Idioma de entrada:</label><br><br>
+                    <select name="idioma_entrada" id="idioma_entrada">
+                        <option value="">Detectar automáticamente</option>
+                        {% for code, name in idiomas.items() %}
+                            <option value="{{ code }}">{{ name }}</option>
+                        {% endfor %}
+                    </select><br><br>
+                    <label for="idioma_salida">Idioma de salida:</label><br><br>
+                    <select name="idioma_salida" id="idioma_salida">
+                        <option value="es">Español</option>
+                        {% for code, name in idiomas.items() %}
+                            <option value="{{ code }}">{{ name }}</option>
+                        {% endfor %}
+                    </select><br><br>
+                    <label for="reproducir_audio">¿Desea escuchar el audio traducido?</label><br><br>
+                    <select name="reproducir_audio" id="reproducir_audio">
+                        <option value="n">No</option>
+                        <option value="s">Sí</option>
+                    </select><br><br>
+                    <button type="submit">Subir Video</button>
+                </form>
+            </div>
+            <div class="panel-container">
+                <div class="text-panel">
+                    <h2>Transcripción</h2>
+                    <p id="transcription">{{ transcripcion }}</p>
+                </div>
+                <div class="text-panel">
+                    <h2>Traducción</h2>
+                    <p id="translation">{{ traduccion }}</p>
+                    {% if audio_traduccion %}
+                        <audio controls autoplay>
+                            <source src="{{ url_for('views.descargar_audio', filename=audio_traduccion.mp3) }}" type="audio/mp3">
+                            Tu navegador no soporta el elemento de audio.
+                        </audio>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
