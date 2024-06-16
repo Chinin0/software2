@@ -1,6 +1,6 @@
 {% extends "base/base.html" %}
 
-{% block title %} Dashboard 1 {% endblock title %}
+{% block title %} Compra {% endblock title %}
 
 {% block stylesheets %}
 {{ super() }}
@@ -18,42 +18,36 @@
             rel="stylesheet">
         <link rel="stylesheet" href="{{url_for('static', filename='build/css/card.css')}}">
 
+
     </head>
 
     <body>
+        <div id="welcome-message" style="display: none;">
+            <h2>Bienvenido a la versión PRO</h2>
+            <p>Disfruta de más tiempo en tu software al mejor precio.</p>
+        </div>
         <div class="contenedor">
             <!-- partial:index.partial.html -->
             <div class="payment-title">
                 <h1>Subscribe to Pro</h1>
             </div>
-
             <div class="total-container">
-                <div>
-                    <b>
-                        <p>Total <abbr
-                                title="the prices shown above don't include any applicable taxes. Subscription automatically renews within 24-hours prior to the end of the current period. To cancel auto-renewai, please contact ................"
-                                class="mi-abbr">ⓘ</abbr></p>
-                    </b>
-                    <!-- <b><label for="total" id="labeltotal">Total</label></b>
-            <b><abbr title="the prices shown above don't include any applicable taxes. Subscription automatically renews within 24-hours prior to the end of the current period. To cancel auto-renewai, please contact ................ " class="mi-abbr">ⓘ</abbr></b> -->
-                </div>
-
+                <b>
+                    <p>Total</p>
+                </b>
             </div>
-
             <div id="totalcantidad"><b>$119.9</b></div>
-
             <div class="renew">
                 <b>
                     <p>Auto renews on Nov 30, 2024</p>
                 </b>
             </div>
-
             <div class="USD">
                 <b>
                     <p>USD</p>
                 </b>
             </div>
-                
+
             <div class="container preload">
                 <div class="creditcard">
                     <div class="front">
@@ -130,6 +124,7 @@
                             </g>
                         </svg>
                     </div>
+
                     <div class="back">
                         <svg version="1.1" id="cardback" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 750 471"
@@ -170,41 +165,47 @@
                 </div>
             </div>
 
-            <div class="form-container">
-                <div class="field-container">
-                    <label for="name">Name</label>
-                    <input id="name" maxlength="20" type="text">
-                </div>
-                <div class="field-container">
-                    <label for="cardnumber">Card Number</label><span id="generatecard">generate random</span>
-                    <input id="cardnumber" type="text" pattern="[0-9]*" inputmode="numeric">
-                    <svg id="ccicon" class="ccicon" width="750" height="471" viewBox="0 0 750 471" version="1.1"
-                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <!-- formulario de datos -->
+            <form id="payment-form">
+                <div class="form-container">
+                    <div class="field-container">
+                        <label for="name">Name</label>
+                        <input id="name" maxlength="20" type="text" required>
+                    </div>
 
-                    </svg>
-                </div>
-                <div class="field-container">
-                    <label for="expirationdate">Expiration (mm/yy)</label>
-                    <input id="expirationdate" type="text" pattern="[0-9]*" inputmode="numeric">
-                </div>
-                <div class="field-container">
-                    <label for="securitycode">Security Code</label>
-                    <input id="securitycode" type="text" pattern="[0-9]*" inputmode="numeric">
-                </div>
-                <div class="field-container">
-                    <label for="privacy">
-                        <input type="checkbox" name="" id="privacy"> I agree to the <a href="">Terms of Service</a> and
-                        <a href="">Privacy Policy</a>.
-                    </label>
+                    <div class="field-container">
+                        <label for="cardnumber">Card Number</label><span id="generatecard">generate random</span>
+                        <input id="cardnumber" type="text" inputmode="numeric" required>
+                        <svg id="ccicon" class="ccicon" width="750" height="471" viewBox="0 0 750 471" version="1.1"
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 
-                </div>
-                <div class="field-container">
-                    <a href="" class="pur">Purchase</a>
-                </div>
+                        </svg>
+                    </div>
 
-            </div>
+                    <div class="field-container">
+                        <label for="expirationdate">Expiration (mm/yy)</label>
+                        <input id="expirationdate" type="text" inputmode="numeric" required>
+                    </div>
+
+                    <div class="field-container">
+                        <label for="securitycode">Security Code</label>
+                        <input id="securitycode" type="text" pattern="[0-9]*" inputmode="numeric" required>
+                    </div>
+
+                    <div class="field-container">
+                        <label for="privacy">
+                            <input type="checkbox" name="" id="privacy" required> I agree to the <a href="">Terms of
+                                Service</a> and
+                            <a href="">Privacy Policy</a>.
+                        </label>
+                    </div>
+
+                    <div class="field-container">
+                        <button type="submit" class="pur">Purchase</button>
+                    </div>
+                </div>
+            </form>
         </div>
-
 
         <!-- partial -->
         <script src='https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js'></script>
@@ -218,5 +219,124 @@
 {% block javascripts %}
 {{ super()}}
 <!-- Chart.js -->
+<script>
+
+    $(document).ready(function () {
+        $('#purchase-btn').click(function (e) {
+            e.preventDefault();
+            var isValid = true;
+
+            // Validar el formulario
+            $('input').each(function () {
+                if (!$(this).val()) {
+                    isValid = false;
+                    alert('Please fill all fields.');
+                    return false;
+                }
+            });
+
+            if (isValid) {
+                $('.contenedor').fadeOut();
+                $('h1, .total-container').fadeOut(); // Ocultar título y sección de total
+                alert('Bienvenido a la versión PRO, disfruta de más tiempo en tu software al mejor precio.');
+
+                // Cambiar la barra de progreso
+                $('#progress-bar').attr('data-transitiongoal', '50').css('width', '50%');
+            }
+        });
+    });
+
+    document.getElementById('payment-form').addEventListener('submit', function (event) {
+        var form = event.target;
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            alert('Please fill out all required fields and accept the terms and conditions.');
+        }
+    });
+
+    document.getElementById('payment-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        var form = event.target;
+        if (form.checkValidity()) {
+            form.style.display = 'none';
+            document.getElementById('welcome-message').style.display = 'block';
+        } else {
+            alert('Please fill out all required fields and accept the terms and conditions.');
+        }
+    });
+
+    $(document).ready(function () {
+        $('.input-cart-number').on('keyup change', function () {
+            $t = $(this);
+
+            if ($t.val().length > 3) {
+                $t.next().focus();
+            }
+
+            var card_number = '';
+            $('.input-cart-number').each(function () {
+                card_number += $(this).val() + ' ';
+                if ($(this).val().length == 4) {
+                    $(this).next().focus();
+                }
+            })
+
+            $('.creditcard .front .svgnumber').text(card_number);
+        });
+
+        $('#card-holder').on('keyup change', function () {
+            $t = $(this);
+            $('.creditcard .front .svgname').text($t.val());
+        });
+
+        $('#card-holder').on('keyup change', function () {
+            $t = $(this);
+            $('.creditcard .back .svgsignature').text($t.val());
+        });
+
+        $('#card-expiration-month, #card-expiration-year').change(function () {
+            m = $('#card-expiration-month option:selected').index();
+            m = (m < 10) ? '0' + m : m;
+            y = $('#card-expiration-year').val().substr(2, 2);
+            $('.card-expiration-date div').html(m + '/' + y);
+            $('.creditcard .front .svgexpire').text(m + '/' + y);
+        });
+
+        $('#card-ccv').on('focus', function () {
+            $('.creditcard').addClass('flipped');
+        }).on('blur', function () {
+            $('.creditcard').removeClass('flipped');
+        }).on('keyup change', function () {
+            $('.creditcard .back .svgsecurity').text($(this).val());
+        });
+
+        $('.btn').click(function (e) {
+            e.preventDefault();
+            var isValid = true;
+
+            // Validar el formulario
+            $('input').each(function () {
+                if (!$(this).val()) {
+                    isValid = false;
+                    alert('Please fill all fields.');
+                    return false;
+                }
+            });
+
+            if (isValid) {
+                $('.contenedor').fadeOut();
+                $('h1, .total-container').fadeOut(); // Ocultar título y sección de total
+                alert('Bienvenido a la versión PRO, disfruta de más tiempo en tu software al mejor precio.');
+
+                // Cambiar la barra de progreso
+                $('.progress-bar').attr('data-transitiongoal', '50').css('width', '50%');
+            }
+        });
+    });
+
+
+
+
+</script>
 
 {% endblock javascripts %}
