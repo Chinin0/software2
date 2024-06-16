@@ -170,6 +170,7 @@
     <body>
         <div class="bg-gray-100 flex items-center justify-center h-screen">
             <div class="text-center content-center">
+                <!-- boton subir archivo de audio y cargarlo -->
                 <div class="upload-button-container">
                     <form action="/upload-audio" method="POST" enctype="multipart/form-data">
                         <label for="audioFile">Selecciona un archivo de audio:</label>
@@ -177,6 +178,8 @@
                         <button type="submit">Subir Audio</button>
                     </form>
                 </div>
+
+                <!-- boton redondo de grabar audio -->
                 <div id="micButton" class="btn-record">
                     <svg id="micIcon" width="24px" height="24px" viewBox="0 0 14 19" version="1.1">
                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -188,8 +191,11 @@
                     </svg>
                 </div>
                 <h1>Púlse para escuchar</h1>
-                <div class="panel-container">
 
+                <!-- paneles de texto divididos en 2 -->
+                <div class="panel-container">
+                    
+                    <!-- panel de texto1 -->
                     <div class="text-panel" style="margin-right: 2%;">
                         <select name="selection" id="selection">
                             <option value="" disabled selected>Idioma de entrada</option>
@@ -199,47 +205,18 @@
                         <p>Este es un panel de texto donde puedes agregar el contenido que desees leer. Puedes
                             personalizar
                             este texto según tus necesidades.</p>
-                        <p>Aquí puedes agregar más párrafos para hacer el panel de texto más informativo y útil.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Risus commodo viverra maecenas accumsan lacus vel facilisis.
-                            Nunc
-                            aliquet bibendum enim facilisis gravida neque convallis a cras. Ipsum nunc aliquet bibendum
-                            enim
-                            facilisis. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Tellus
-                            molestie
-                            nunc non blandit massa enim. Nibh sed pulvinar proin gravida. Dui ut ornare lectus sit amet
-                            est
-                            placerat. Faucibus vitae aliquet nec ullamcorper sit. Arcu dui vivamus arcu felis bibendum
-                            ut.
-                            Condimentum lacinia quis vel eros. Diam donec adipiscing tristique risus nec. In nulla
-                            posuere</p>
                     </div>
-
-
+                    
+                    <!-- panel de texto 2 -->
                     <div class="text-panel">
                         <select name="selection" id="selection">
                             <option value="" disabled selected>Idioma de salida</option>
                             <option value="1">Option 1</option>
                             <option value="2">Option 2</option>
                         </select>
-
                         <p>Este es un panel de texto donde puedes agregar el contenido que desees leer. Puedes
                             personalizar
                             este texto según tus necesidades.</p>
-                        <p>Aquí puedes agregar más párrafos para hacer el panel de texto más informativo y útil.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Risus commodo viverra maecenas accumsan lacus vel facilisis.
-                            Nunc
-                            aliquet bibendum enim facilisis gravida neque convallis a cras. Ipsum nunc aliquet bibendum
-                            enim
-                            facilisis. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Tellus
-                            molestie
-                            nunc non blandit massa enim. Nibh sed pulvinar proin gravida. Dui ut ornare lectus sit amet
-                            est
-                            placerat. Faucibus vitae aliquet nec ullamcorper sit. Arcu dui vivamus arcu felis bibendum
-                            ut.
-                            Condimentum lacinia quis vel eros. Diam donec adipiscing tristique risus nec. In nulla
-                            posuere</p>
                     </div>
                 </div>
             </div>
