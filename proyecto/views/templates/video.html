@@ -72,6 +72,13 @@
                                 </select><br><br>
                                 <h2>Transcripción</h2>
                                 <p id="transcription">{{ transcripcion }}</p>
+                                {% if audio_traduccion %}
+                                <audio controls autoplay>
+                                    <source src="/static/archivostemporales/temporal.wav" type="audio/mp3">
+                                    Tu navegador no soporta el elemento de audio.
+                                </audio>
+                                {% endif %}
+                                
                             </div>
 
                             <!-- panel de texto 2 -->
@@ -84,10 +91,10 @@
                                 </select><br><br>
                                 <h2>Traducción</h2>
                                 <p id="translation">{{ traduccion }}</p>
+
                                 {% if audio_traduccion %}
                                 <audio controls autoplay>
-                                    <source src="{{ url_for('views.descargar_audio', filename=audio_traduccion.mp3) }}"
-                                        type="audio/mp3">
+                                    <source src="/static/archivostemporales/audio_traduccion.mp3" type="audio/mp3">
                                     Tu navegador no soporta el elemento de audio.
                                 </audio>
                                 {% endif %}
