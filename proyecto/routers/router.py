@@ -7,9 +7,10 @@ from ..models.User import User
 import os
 from werkzeug.utils import secure_filename
 
-# funciones de la funcionalidad audio
+# Funciones de la funcionalidad audio
 AudioController.transcribir_y_traducir, AudioController.mostrar_codigos_idiomas, AudioController.limpiar_archivos_temporales, AudioController.TEMP_DIR
 
+# Funciones de la funcionalidad Video
 VideoController.convertir_video_a_wav, VideoController.transcribir_y_traducir, VideoController.mostrar_codigos_idiomas, VideoController.limpiar_archivos_temporales, VideoController.TEMP_DIR
 
 app = Flask(__name__)
