@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 import uuid
 
-#Controlador de la funcionalidad audio
+# Controlador de la funcionalidad audio
 # Fijar el seed para la detección de idioma para obtener resultados reproducibles
 DetectorFactory.seed = 0
 
