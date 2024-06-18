@@ -1,15 +1,17 @@
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for, send_file, Flask
 from datetime import datetime
 # importamos los controladores de Usuario
-from ..controllers import UserController, VideoController
+from ..controllers import UserController, VideoController, AudioController
 # importamos los Modelos de usuario
 from ..models.User import User
-
-
 import os
 from werkzeug.utils import secure_filename
 
+# funciones de la funcionalidad audio
+AudioController.transcribir_y_traducir, AudioController.mostrar_codigos_idiomas, AudioController.limpiar_archivos_temporales, AudioController.TEMP_DIR
+
 VideoController.convertir_video_a_wav, VideoController.transcribir_y_traducir, VideoController.mostrar_codigos_idiomas, VideoController.limpiar_archivos_temporales, VideoController.TEMP_DIR
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
@@ -151,8 +153,49 @@ def presencial():
 
 @home.route('/audio/')
 def audio():
-    return render_template("audio.html")
+    return render_template("audio.html", idiomas=IDIOMAS)
 
+@home.route('/upload-audio', methods=['POST'])
+def upload_audio():
+    AudioController.limpiar_archivos_temporales()  # Limpiar archivos temporales antes de procesar un nuevo audio
+
+    if 'audioFile' not in request.files:
+        return redirect(request.url)
+    
+    file = request.files['audioFile']
+    if file.filename == '':
+        return redirect(request.url)
+    
+    if file:
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+
+        idioma_entrada = request.form.get('idioma_entrada', '')
+        idioma_salida = request.form.get('idioma_salida', 'es')
+        reproducir_audio = request.form.get('reproducir_audio', 'n') == 's'
+
+        resultado = AudioController.transcribir_y_traducir(filepath, idioma_entrada, idioma_salida, reproducir_audio)
+
+        audio_traduccion = resultado.get('audio_traduccion', '')
+        print('Valor de audio_traduccion:', audio_traduccion)
+
+        return render_template('audio.html', idiomas=IDIOMAS, 
+        transcripcion=resultado.get('texto', ''), traduccion=resultado.get('texto_traducido', ''), audio_traduccion=audio_traduccion)
+    
+    return redirect(request.url)
+
+@home.route('/descargar-audio/<filename>')
+def descargar_audioFile(filename):
+    file_path = None
+    # Buscar el archivo en el directorio temporal
+    for root, dirs, files in os.walk(app.config['TEMP_DIR']):
+        if filename in files:
+            file_path = os.path.join(root, filename)
+            break
+    if file_path:
+        return send_file(file_path, as_attachment=True)
+    return "Archivo no encontrado", 404
 
 @home.route('/video/')
 def index():
@@ -193,7 +236,7 @@ def upload_video():
     return redirect(request.url)
 
 
-@home.route('/descargar_audio/<filename>')
+@home.route('/descargar_audio<filename>')
 def descargar_audio(filename):
     file_path = None
     # Buscar el archivo en el directorio temporal
