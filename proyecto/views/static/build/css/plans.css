@@ -1,23 +1,22 @@
-
-*{
-    margin:0;
+* {
+    margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
-    font-family: sans-serif ;
+body {
+    font-family: sans-serif;
 
 }
 
-h4{
+h4 {
     font-size: 30px;
     text-align: center;
     margin-top: 40px;
     margin-bottom: 20px;
 }
 
-.contenedor{
+.contenedor {
     width: 90%;
     max-width: 900px;
     margin: auto;
@@ -32,7 +31,7 @@ h4{
     overflow: hidden;
 }
 
-.tabla{
+.tabla {
     width: 33%;
     height: 600px;
     margin: auto;
@@ -43,7 +42,7 @@ h4{
 
     max-width: 300px;
     overflow: hidden;
-    
+
     text-overflow: ellipsis;
 }
 
@@ -51,27 +50,27 @@ h4{
 
 
 
-.tabla>h2{
+.tabla>h2 {
     font-size: 30px;
     margin-bottom: 20px;
 }
 
-#precio{
+#precio {
     margin-bottom: 3px;
 }
 
-#userMonth{
+#userMonth {
     font-size: 100;
     color: darkgrey;
     margin-bottom: 10px;
 }
 
-.tabla>h3{
+.tabla>h3 {
     font-size: 14px;
     margin-bottom: 20px;
 }
 
-.boton{
+.boton {
     display: inline-block;
     width: 100%;
     padding: 12px;
@@ -86,7 +85,7 @@ h4{
     margin-bottom: 20px;
 }
 
-#enterprise{
+#enterprise {
     display: inline-block;
     width: 100%;
     padding: 12px;
@@ -103,29 +102,29 @@ h4{
     margin-top: 90px;
 }
 
-.tabla>h5{
+.tabla>h5 {
     font-size: 12px;
     margin-bottom: 20px;
     color: rgb(0, 0, 69);
 }
 
-#tiempo{
+#tiempo {
     font-size: 100;
     margin-bottom: 10px;
     margin-top: 40px;
 }
 
-#dias{
+#dias {
     font-size: 100;
     color: darkgrey;
     margin-bottom: 10px;
 }
 
-#primerh5{
+#primerh5 {
     margin-top: 72px;
 }
 
-.tablabasic{
+.tablabasic {
     width: 90%;
     height: 430px;
     margin: auto;
@@ -136,31 +135,37 @@ h4{
 
     max-width: 900px;
     overflow: hidden;
-    
+
     text-overflow: ellipsis;
 }
 
-.tablabasic>h2{
+.tablabasic>h2 {
     font-size: 30px;
     margin-bottom: 20px;
 }
 
-.tablabasic>h3{
+.tablabasic>h3 {
     font-size: 17px;
     margin-bottom: 20px;
 }
 
-.tablabasic>h5{
+.tablabasic>h5 {
     font-size: 12px;
     margin-bottom: 20px;
     color: rgb(0, 0, 69);
 }
 
 @media screen and (max-width: 1000px) {
-    .contenedor{
-        overflow-y: scroll;
+
+    .scrollable-section {
+        max-height: 600px;
+        overflow-y: auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        background-color: #fff;
     }
-    .tabla{
+
+    .tabla {
         width: 100%;
         max-width: none;
         margin-bottom: 40px;
@@ -169,15 +174,24 @@ h4{
     }
 }
 
+
+.scrollable-section {
+    max-height: 600px;
+    overflow-y: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
 @media screen and (max-width: 550px) {
-    .tabla{
+    .tabla {
         width: 100%;
         padding: 20px;
     }
 }
 
 
-ul{
+ul {
     list-style-type: disc;
     margin-bottom: 20px;
     margin-top: 10px;
@@ -185,7 +199,7 @@ ul{
     color: rgb(0, 0, 69);
 }
 
-#ulbasic{
+#ulbasic {
     list-style-type: disc;
     margin-bottom: 20px;
     margin-top: 70px;
@@ -193,11 +207,11 @@ ul{
     color: rgb(0, 0, 69);
 }
 
-#item{
+#item {
     margin-top: 10px;
 }
 
-.botonsidebar{
+.botonsidebar {
     display: inline-block;
     width: 50%;
     padding: 5px;
@@ -217,7 +231,7 @@ ul{
     margin-left: 15px;
 }
 
-.minutes{
+.minutes {
     margin-top: 20px;
     margin-left: 15px;
 }
