@@ -10,7 +10,8 @@
 <div class="right_col" role="main">
     <!DOCTYPE html>
     <html lang="en">
-<!-- cambios de chinin para prueba -->
+    <!-- cambios de chinin para prueba -->
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,6 +21,14 @@
             integrity="sha384-rMzH5hNv9cdL3iJSJCEmyFNE4o3JGt2V6wOrX3gIT7Gj9Wfgvk5tbcG+yUHsOF+k" crossorigin="anonymous">
         <link rel="stylesheet" href="{{url_for('static', filename='build/css/video.css')}}">
         <style>
+            .scrollable-section {
+                max-height: 600px;
+                overflow-y: auto;
+                padding: 20px;
+                border: 1px solid #ccc;
+                background-color: #fff;
+            }
+
             .contains {
                 display: flex;
                 justify-content: center;
@@ -44,67 +53,69 @@
 
     <body>
         <div class="bg-gray-100 flex items-center justify-center h-screen">
-            <div class="text-center content-center">
-                <div class="upload-button-container">
-                    <form action="/upload-video" method="POST" enctype="multipart/form-data">
-                        <div class="drop-zone" id="dropZone">
-                            <span class="drop-zone-text">Arrastra y suelta tu video aquí o haz clic para
-                                seleccionarlo</span>
-                            <input type="file" id="videoFile" name="videoFile" accept="video/*" class="file-input">
-                        </div>
-                        <div class="contains">
-                            <div class="select-container">
-                                <select name="idioma_entrada" id="idioma_entrada">
-                                    <option value="">Idioma Entrada</option>
-                                    {% for code, name in idiomas.items() %}
-                                    <option value="{{ code }}">{{ name }}</option>
-                                    {% endfor %}
-                                </select>
-
-                                <select name="idioma_salida" id="idioma_salida">
-                                    <option value="es">Idioma Salida</option>
-                                    {% for code, name in idiomas.items() %}
-                                    <option value="{{ code }}">{{ name }}</option>
-                                    {% endfor %}
-                                </select>
+            <div class="scrollable-section">
+                <div class="text-center content-center">
+                    <div class="upload-button-container">
+                        <form action="/upload-video" method="POST" enctype="multipart/form-data">
+                            <div class="drop-zone" id="dropZone">
+                                <span class="drop-zone-text">Arrastra y suelta tu video aquí o haz clic para
+                                    seleccionarlo</span>
+                                <input type="file" id="videoFile" name="videoFile" accept="video/*" class="file-input">
                             </div>
-                        </div>
+                            <div class="contains">
+                                <div class="select-container">
+                                    <select name="idioma_entrada" id="idioma_entrada">
+                                        <option value="">Idioma Entrada</option>
+                                        {% for code, name in idiomas.items() %}
+                                        <option value="{{ code }}">{{ name }}</option>
+                                        {% endfor %}
+                                    </select>
 
-                        <div id="videoPreview" class="video-preview">
-                            <video controls></video>
-                        </div>
-
-                        <!-- seleccionar entrada y salidas -->
-
-                        <button type="submit">Subir Video</button><br>
-
-                        <!-- paneles de texto completo -->
-                        <div class="panel-container">
-                            <!-- panel de texto 1 -->
-                            <div class="text-panel" style="margin-right: 2%;">
-                                <h2>Transcripción</h2>
-                                <p id="transcription">{{ transcripcion }}</p>
-                                {% if audio_traduccion %}
-                                <audio controls>
-                                    <source src="/static/archivostemporales/temporal.wav" type="audio/mp3">
-                                    Tu navegador no soporta el elemento de audio.
-                                </audio>
-                                {% endif %}
+                                    <select name="idioma_salida" id="idioma_salida">
+                                        <option value="es">Idioma Salida</option>
+                                        {% for code, name in idiomas.items() %}
+                                        <option value="{{ code }}">{{ name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
 
-                            <!-- panel de texto 2 -->
-                            <div class="text-panel">
-                                <h2>Traducción</h2>
-                                <p id="translation">{{ traduccion }}</p>
-                                {% if audio_traduccion %}
-                                <audio controls>
-                                    <source src="/static/archivostemporales/audio_traduccion.mp3" type="audio/mp3">
-                                    Tu navegador no soporta el elemento de audio.
-                                </audio>
-                                {% endif %}
+                            <div id="videoPreview" class="video-preview">
+                                <video controls></video>
                             </div>
-                        </div>
-                    </form>
+
+                            <!-- seleccionar entrada y salidas -->
+
+                            <button type="submit">Subir Video</button><br>
+
+                            <!-- paneles de texto completo -->
+                            <div class="panel-container">
+                                <!-- panel de texto 1 -->
+                                <div class="text-panel" style="margin-right: 2%;">
+                                    <h2>Transcripción</h2>
+                                    <p id="transcription">{{ transcripcion }}</p>
+                                    {% if audio_traduccion %}
+                                    <audio controls>
+                                        <source src="/static/archivostemporales/temporal.wav" type="audio/mp3">
+                                        Tu navegador no soporta el elemento de audio.
+                                    </audio>
+                                    {% endif %}
+                                </div>
+
+                                <!-- panel de texto 2 -->
+                                <div class="text-panel">
+                                    <h2>Traducción</h2>
+                                    <p id="translation">{{ traduccion }}</p>
+                                    {% if audio_traduccion %}
+                                    <audio controls>
+                                        <source src="/static/archivostemporales/audio_traduccion.mp3" type="audio/mp3">
+                                        Tu navegador no soporta el elemento de audio.
+                                    </audio>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
