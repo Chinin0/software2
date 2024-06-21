@@ -2,8 +2,9 @@ from flask import Blueprint, flash, redirect, render_template, request, session,
 from datetime import datetime
 # importamos los controladores de Usuario
 from ..controllers import UserController, VideoController, AudioController
+from ..controllers import PlansController
 # importamos los Modelos de usuario
-from ..models.User import User
+from ..models.User import User, Plan
 import os
 from werkzeug.utils import secure_filename
 
@@ -35,7 +36,7 @@ def login():
     if request.method == 'POST':
         data = request.form  # guardo todos los datos ingresados por formulario de la vista
         print('------datos ingresados por formulario-------')
-        usuario = User(0, data['email'], data['password'], 0)  # capturo los datos del formulario y mando al modelo User
+        usuario = User(0, data['email'], data['password'],0 , 0, 0)  # capturo los datos del formulario y mando al modelo User
         # los 0 son nulos porque no metemos desde formulario
 
         logged_user = UserController.login(usuario)
@@ -51,8 +52,14 @@ def login():
                 session['name'] = logged_user.name
                 session['email'] = logged_user.email
                 session['password'] = logged_user.password_hash
+                session['id_rol'] = logged_user.id_rol
+                session['state'] = logged_user.state
                 session['create_at'] = logged_user.create_at
-                return redirect(url_for('views.dashboard'))  # redirige dashboard que corresponde//////chinin estuvo aquí
+                if(logged_user.id_rol == 1):
+                    return redirect(url_for('views.dashboard_admin'))
+                   # return render_template("dashboardAdmin.html")
+                else:
+                    return redirect(url_for('views.dashboard'))  # redirige dashboard que corresponde//////chinin estuvo aquí
             else:
                 flash("Usuario o Contraseña invalida")  # Contraseña invalida
                 return render_template("login.html")
@@ -71,7 +78,7 @@ def register():
         data = request.form
         print('------datos ingresados por formulario-------')
         print(data)
-        usuario = User(data['name'], data['email'], data['password'], time_creacion)
+        usuario = User(data['name'], data['email'], data['password'], data['id_rol'], data['state'], time_creacion)
         # capturo los datos del formulario y mando al modelo User
         # los 0 son nulos porque no metemos desde formulario
         UserController.create(usuario)
@@ -87,6 +94,11 @@ def dashboard():
         return render_template('dashboard.html')
     return redirect(url_for('views.login'))
 
+@home.route('/dashboard_admin')
+def dashboard_admin():
+    if 'Esta_logeado' in session:
+        return render_template('dashboardAdmin.html')
+    return redirect(url_for('views.login'))
 
 @home.route('/logout')
 def logout():
@@ -101,6 +113,54 @@ def logout():
 def plans():
     if 'Esta_logeado' in session:  # Si el usuario esta logeado entonces realiza funcionalidades permitidas
         return render_template("plans.html")
+    return redirect(url_for('views.login'))
+
+@home.route('/admin_plans/')
+def admin_plans():
+    if 'Esta_logeado' in session:  # Si el usuario está logeado entonces realiza funcionalidades permitidas
+        planes = PlansController.getAll()
+        print(planes)  # Verificación de datos
+        return render_template("admin_plans.html", plans=planes)
+    return redirect(url_for('views.login'))
+
+
+@home.route('/admin_plans/create', methods=['GET', 'POST'])
+def create_plan():
+    if 'Esta_logeado' in session:
+        if request.method == 'POST':
+            plan_data = {
+                'name': request.form['name'],
+                'description': request.form['description'],
+                'monthly_price': request.form['monthly_price']
+            }
+            PlansController.create(plan_data)
+            return redirect(url_for('views.admin_plans'))
+        return render_template("create_plan.html")
+    return redirect(url_for('views.login'))
+
+
+@home.route('/admin_plans/update/<int:id>', methods=['GET', 'POST'])
+def update_plan(id):
+    if 'Esta_logeado' in session:
+        if request.method == 'POST':
+            plan_data = {
+                'id': id,
+                'name': request.form['name'],
+                'description': request.form['description'],
+                'monthly_price': request.form['monthly_price']
+            }
+            PlansController.update(plan_data)
+            return redirect(url_for('views.admin_plans'))
+        plan = PlansController.getById(id)
+        return render_template("update_plan.html", plan=plan)
+    return redirect(url_for('views.login'))
+
+
+@home.route('/admin_plans/delete/<int:id>', methods=['POST'])
+def delete_plan(id):
+    if 'Esta_logeado' in session:
+        PlansController.delete(id)
+        return redirect(url_for('views.admin_plans'))
     return redirect(url_for('views.login'))
 
 
