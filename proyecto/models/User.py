@@ -2,6 +2,8 @@ from werkzeug.security import check_password_hash,generate_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from proyecto import app
+from proyecto.database.connection import _fetch_all,_fecth_lastrow_id,_fetch_none,_fetch_one  #las funciones 
+
 
 db = SQLAlchemy(app)        # creamos una instancia 
 
@@ -17,6 +19,9 @@ class Roles(db.Model):
     
     # Relación inversa con la tabla User
     users = db.relationship('User', backref='role', lazy=True)
+
+
+
 
 # Define el modelo de datos Usuario
 class User(db.Model):
@@ -40,6 +45,8 @@ class User(db.Model):
         self.state = state
         self.create_at = create_at
 
+    sql2 = "INSERT INTO users (name, email, password, id_rol, state, create_at ) VALUES (%s, %s, %s,%s, %s, %s);"
+    _fetch_none(sql2, ('admin', 'admin@gmail.com', '12345678', 1, 'activo', datetime.now))
 
     @classmethod  # Lo decoro con metodo de clase para poder usar (instanciar) este metodo en otro archivo
     def check_password(self,hashed_password, password_hash):

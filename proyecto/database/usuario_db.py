@@ -6,6 +6,10 @@ from .connection import _fetch_all,_fecth_lastrow_id,_fetch_none,_fetch_one  #la
 def create(usuario: User) -> User:
     # falta implementar los metodos de validacion asi que hay que ingresar datos correctos sino genera error
     #sql = """ INSERT INTO users VALUES('{}','{}','{}') """.format(usuario.name, usuario.email, usuario.password_hash) #la variable del modelo User
+    sql2 = "INSERT INTO roles (id, rol) VALUES (%s, %s);"
+    _fetch_none(sql2, (1, 'Administrador'))
+    _fetch_none(sql2, (2, 'Usuario'))
+
     sql = "INSERT INTO users (name, email, password_hash, id_rol, state, create_at) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id;"
 
     _fetch_none(sql,(usuario.name, usuario.email, usuario.password_hash, usuario.id_rol, usuario.state, usuario.create_at))
