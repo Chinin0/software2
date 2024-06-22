@@ -7,6 +7,8 @@ from ..controllers import PlansController
 from ..models.User import User, Plan
 import os
 from werkzeug.utils import secure_filename
+from proyecto.database.connection import _fetch_all,_fecth_lastrow_id,_fetch_none,_fetch_one  #las funciones 
+from werkzeug.security import generate_password_hash
 
 # Funciones de la funcionalidad audio
 AudioController.transcribir_y_traducir, AudioController.mostrar_codigos_idiomas, AudioController.limpiar_archivos_temporales, AudioController.TEMP_DIR
@@ -27,6 +29,18 @@ home = Blueprint("views", __name__)
 # funciones decoradas, (para que puedan ser usadas en otro archivo)
 @home.route('/', methods=['GET'])
 def home_():
+    """
+    Cargar Usuario Admin
+    """
+    user = User(name="admin", email="admin@gmail.com",password = generate_password_hash("12345678"), id_rol = 1, state= "activo", create_at= datetime.now() )
+    if User.query.filter_by(email=user.email).first():
+        print("Usuario Admin ya esta registrado")
+        flash('Usuario Admin ya esta registrado', 'danger')
+    else:   
+        sql = "INSERT INTO roles (id, rol) VALUES (%s, %s);"
+        _fetch_none(sql, (1, 'Administrador'))
+        _fetch_none(sql, (2, 'Usuario'))
+        UserController.create(user)
     return render_template("home.html")
 
 
