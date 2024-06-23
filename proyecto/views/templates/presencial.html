@@ -1,212 +1,120 @@
-{% extends "base/base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Recognition and Translation</title>
+</head>
+<body>
+    <h1>Speech Recognition and Translation</h1>
+    <p>Choose the language to speak:</p>
+    <select id="sourceLang">
+        {% for code, name in languages.items() %}
+        <option value="{{ code }}">{{ name }}</option>
+        {% endfor %}
+    </select>
 
-{% block title %} Dashboard 1 {% endblock title %}
+    <p>Choose the language for translation:</p>
+    <select id="targetLang">
+        {% for code, name in languages.items() %}
+        <option value="{{ code }}">{{ name }}</option>
+        {% endfor %}
+    </select>
 
-{% block stylesheets %}
-{{ super() }}
-{% endblock stylesheets %}
+    <button id="startCaptureButton">Start Recognition</button>
+    <button onclick="stopCapture()">Stop Capture</button>
 
-{% block content %}
-<div class="right_col" role="main">
-    <!DOCTYPE html>
-    <html lang="en">
+    <div>
+        <input type="checkbox" id="speakTranslation" /> 
+        <label for="speakTranslation">Speak Translations</label>
+    </div>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet"> -->
-        <title>Audio Recorder</title>
-        <style>
-            .flex {
-                display: flex;
-            }
+    <div id="result">
+        <div id="recognizedTexts"></div>
+        <div id="translationTexts"></div>
+        <p id="errorMessage" style="color: red;"></p>
+    </div>
 
-            .items-center {
-                align-items: center;
-            }
+    <audio id="translationAudio" controls style="display:none"></audio>
 
-            .justify-center {
-                justify-content: center;
-            }
+    <script>
+        let captureInterval;
+        let lastPlayedAudio = null;
 
-            .h-screen {
-                height: 100vh;
-            }
+        document.getElementById('startCaptureButton').addEventListener('click', function() {
+            var sourceLang = document.getElementById("sourceLang").value;
+            var targetLang = document.getElementById("targetLang").value;
+            var speakTranslations = document.getElementById("speakTranslation").checked;
 
-            .text-center {
-                text-align: center;
-            }
-
-            .btn-record {
-                background-color: red;
-                padding: 1rem;
-                /* 16px */
-                border-radius: 9999px;
-                /* Full rounded */
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 60px;
-                height: 60px;
-            }
-
-            .content-center {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                height: 100%;
-            }
-
-            .bg-red {
-                background-color: red;
-            }
-
-            .bg-green {
-                background-color: #48bb78;
-                /* Green 500 from Tailwind */
-            }
-
-            .right_col {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-            }
-
-            svg {
-                width: 24px;
-                height: 24px;
-            }
-
-            h1 {
-                margin-top: 1rem;
-                /* Space between the button and the text */
-            }
-
-            .text-panel {
-                background-color: white;
-                padding: 1rem;
-                border-radius: 8px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                max-width: 600px;
-                /* Adjust the max-width as needed */
-                max-height: 300px;
-                /* Maximum height for the panel */
-                overflow-y: auto;
-                /* Enable vertical scroll when content exceeds max-height */
-                text-align: left;
-                margin-top: 1rem;
-                /* Space between the h1 and the text panel */
-            }
-
-            .panel-container {
-                display: flex;
-                justify-content: space-around;
-                align-items: flex-start;
-                width: 100%;
-            }
-        </style>
-    </head>
-
-    <body>
-        <div class="bg-gray-100 flex items-center justify-center h-screen">
-            <div class="text-center content-center">
-                <div id="micButton" class="btn-record">
-                    <svg id="micIcon" width="24px" height="24px" viewBox="0 0 14 19" version="1.1">
-                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                            <path
-                                d="M7,12 C8.66,12 9.99,10.66 9.99,9 L10,3 C10,1.34 8.66,0 7,0 C5.34,0 4,1.34 4,3 L4,9 C4,10.66 5.34,12 7,12 Z M12.3,9 C12.3,12 9.76,14.1 7,14.1 C4.24,14.1 1.7,12 1.7,9 L0,9 C0,12.41 2.72,15.23 6,15.72 L6,19 L8,19 L8,15.72 C11.28,15.24 14,12.42 14,9 L12.3,9 Z"
-                                fill="#FFFFFF" fill-rule="nonzero">
-                            </path>
-                        </g>
-                    </svg>
-                </div>
-                <h1>Púlse para escuchar</h1>
-                <div class="panel-container">
-
-                    <div class="text-panel" style="margin-right: 2%;">
-                        <select name="selection" id="selection">
-                            <option value="" disabled selected>Idioma de entrada</option>
-                            <option value="1">Option 1</option>
-                            <option value="2">Option 2</option>
-                        </select>
-                        <p>Este es un panel de texto donde puedes agregar el contenido que desees leer. Puedes
-                            personalizar
-                            este texto según tus necesidades.</p>
-                        <p>Aquí puedes agregar más párrafos para hacer el panel de texto más informativo y útil.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Risus commodo viverra maecenas accumsan lacus vel facilisis.
-                            Nunc
-                            aliquet bibendum enim facilisis gravida neque convallis a cras. Ipsum nunc aliquet bibendum
-                            enim
-                            facilisis. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Tellus
-                            molestie
-                            nunc non blandit massa enim. Nibh sed pulvinar proin gravida. Dui ut ornare lectus sit amet
-                            est
-                            placerat. Faucibus vitae aliquet nec ullamcorper sit. Arcu dui vivamus arcu felis bibendum
-                            ut.
-                            Condimentum lacinia quis vel eros. Diam donec adipiscing tristique risus nec. In nulla
-                            posuere</p>
-                    </div>
-
-
-                    <div class="text-panel">
-                        <select name="selection" id="selection">
-                            <option value="" disabled selected>Idioma de salida</option>
-                            <option value="1">Option 1</option>
-                            <option value="2">Option 2</option>
-                        </select>
-
-                        <p>Este es un panel de texto donde puedes agregar el contenido que desees leer. Puedes
-                            personalizar
-                            este texto según tus necesidades.</p>
-                        <p>Aquí puedes agregar más párrafos para hacer el panel de texto más informativo y útil.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Risus commodo viverra maecenas accumsan lacus vel facilisis.
-                            Nunc
-                            aliquet bibendum enim facilisis gravida neque convallis a cras. Ipsum nunc aliquet bibendum
-                            enim
-                            facilisis. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Tellus
-                            molestie
-                            nunc non blandit massa enim. Nibh sed pulvinar proin gravida. Dui ut ornare lectus sit amet
-                            est
-                            placerat. Faucibus vitae aliquet nec ullamcorper sit. Arcu dui vivamus arcu felis bibendum
-                            ut.
-                            Condimentum lacinia quis vel eros. Diam donec adipiscing tristique risus nec. In nulla
-                            posuere</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-
-        <script>
-            const micButton = document.getElementById('micButton');
-            let isRecording = false;
-
-            micButton.addEventListener('click', () => {
-                isRecording = !isRecording;
-                if (isRecording) {
-                    micButton.classList.remove('bg-red');
-                    micButton.classList.add('bg-green');
-                } else {
-                    micButton.classList.remove('bg-green');
-                    micButton.classList.add('bg-red');
-                }
+            fetch('/start_capture', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sourceLang, targetLang, speakTranslations })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                captureInterval = setInterval(getTranslations, 5000); // Update every 5 seconds
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
-        </script>
-    </body>
+        });
 
-    </html>
+        function getTranslations() {
+            fetch('/get_translations')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.error_message) {
+                        document.getElementById("errorMessage").innerText = data.error_message;
+                    } else {
+                        const recognizedTextsDiv = document.getElementById("recognizedTexts");
+                        const translationTextsDiv = document.getElementById("translationTexts");
 
-</div>
+                        // Append new texts without clearing the old ones
+                        data.recognized_texts.slice(recognizedTextsDiv.childElementCount).forEach(text => {
+                            const p = document.createElement("p");
+                            p.textContent = text;
+                            recognizedTextsDiv.appendChild(p);
+                        });
+                        data.translation_texts.slice(translationTextsDiv.childElementCount).forEach(text => {
+                            const p = document.createElement("p");
+                            p.textContent = text;
+                            translationTextsDiv.appendChild(p);
+                        });
 
-{% endblock content %}
+                        // Reproducir el archivo de audio si existe y no es el mismo que el último reproducido
+                        if (data.audio_path && data.audio_path !== lastPlayedAudio) {
+                            const audioElement = document.getElementById("translationAudio");
+                            audioElement.src = `/uploads/${data.audio_path.split('/').pop()}`;
+                            audioElement.style.display = "block";
+                            audioElement.play();
+                            lastPlayedAudio = data.audio_path;  // Actualizar la variable con el último archivo reproducido
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
 
-{% block javascripts %}
-{{ super()}}
-<!-- Chart.js -->
+        function stopCapture() {
+            fetch('/stop_capture')
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    clearInterval(captureInterval); // Stop updates
+                })
+                .catch(error => {
+                    console.error('Error stopping capture:', error);
+                });
+        }
+    </script>
+</body>
+</html>
 
-{% endblock javascripts %}
+
+ 
