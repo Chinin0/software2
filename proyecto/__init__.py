@@ -1,7 +1,7 @@
 from flask import Flask
 from config import BaseConfig
 from flask_migrate import Migrate
-
+import os
 
 
 
@@ -13,6 +13,7 @@ app.config.from_object('config.DevConfig')  # traigo las configuraciones de DevC
 
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 from .models.User import db       # importo el db para poder migrar a la base de datos
 
