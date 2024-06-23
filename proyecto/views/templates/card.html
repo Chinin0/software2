@@ -23,24 +23,13 @@
 
     <body>
         <div class="contenedor">
-            <!-- partial:index.partial.html -->
-            <div class="payment-title">
+            <div>
                 <h1>Subscribe to Pro</h1>
-            </div>
-            <div class="total-container">
                 <b>
-                    <p>Total</p>
-                </b>
-            </div>
-            <div id="totalcantidad"><b>$119.9</b></div>
-            <div class="renew">
-                <b>
-                    <p>Auto renews on Nov 30, 2024</p>
-                </b>
-            </div>
-            <div class="USD">
-                <b>
-                    <p>USD</p>
+                    <p>Total:</p>
+                    <div id="totalcantidad">
+                        <b>$20.00</b>
+                    </div>
                 </b>
             </div>
 
@@ -179,7 +168,6 @@
                         <input id="cardnumber" type="text" inputmode="numeric" required>
                         <svg id="ccicon" class="ccicon" width="750" height="471" viewBox="0 0 750 471" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-
                         </svg>
                     </div>
 
@@ -209,6 +197,7 @@
         </div>
 
         <!-- partial -->
+        <iframe id="sidebar" src="/proyecto/views/templates/base/sidebar.html" style="display:none;"></iframe>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js'></script>
         <script src="{{ url_for('static', filename='build/js/card.js')}}"></script>
     </body>
@@ -266,6 +255,9 @@
         }
     });
 
+
+
+
     $(document).ready(function () {
         $('.input-cart-number').on('keyup change', function () {
             $t = $(this);
@@ -313,8 +305,27 @@
 
     });
 
+    document.getElementById('payment-form').addEventListener('submit', function (event) {
+        event.preventDefault();  // Evita el envío del formulario para propósitos de demostración
 
+        // Asegúrate de que el formulario se haya validado correctamente antes de proceder
+        if (this.checkValidity()) {
+            // Cambiar el valor de data-transitiongoal en sidebar.html
+            var sidebarIframe = document.getElementById('sidebar');
+            sidebarIframe.style.display = 'block'; // Asegúrate de que el iframe esté visible para poder acceder a su contenido
 
+            // Esperar a que el iframe cargue antes de intentar acceder a su contenido
+            sidebarIframe.onload = function () {
+                var progressBar = sidebarIframe.contentWindow.document.querySelector('.progress-bar');
+                if (progressBar) {
+                    progressBar.setAttribute('data-transitiongoal', '50');
+                    progressBar.style.width = '50%';
+                }
+            };
+        } else {
+            console.log('Formulario no válido');
+        }
+    });
 
 </script>
 

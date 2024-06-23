@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Recognition and Translation</title>
+</head>
+<body>
+    <h1>Speech Recognition and Translation</h1>
+    <p>Choose the language to speak:</p>
+    <select id="sourceLang">
+        {% for code, name in languages.items() %}
+        <option value="{{ code }}">{{ name }}</option>
+        {% endfor %}
+    </select>
+
+    <p>Choose the language for translation:</p>
+    <select id="targetLang">
+        {% for code, name in languages.items() %}
+        <option value="{{ code }}">{{ name }}</option>
+        {% endfor %}
+    </select>
+
+    <button id="startCaptureButton">Start Recognition</button>
+    <button onclick="stopCapture()">Stop Capture</button>
+
+    <div>
+        <input type="checkbox" id="speakTranslation" /> 
+        <label for="speakTranslation">Speak Translations</label>
+    </div>
+
+    <div id="result">
+        <div id="recognizedTexts"></div>
+        <div id="translationTexts"></div>
+        <p id="errorMessage" style="color: red;"></p>
+    </div>
+
+    <audio id="translationAudio" controls style="display:none"></audio>
+
+    <script>
+        let captureInterval;
+        let lastPlayedAudio = null;
+
+        document.getElementById('startCaptureButton').addEventListener('click', function() {
+            var sourceLang = document.getElementById("sourceLang").value;
+            var targetLang = document.getElementById("targetLang").value;
+            var speakTranslations = document.getElementById("speakTranslation").checked;
+
+            fetch('/start_capture', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sourceLang, targetLang, speakTranslations })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                captureInterval = setInterval(getTranslations, 5000); // Update every 5 seconds
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        function getTranslations() {
+            fetch('/get_translations')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.error_message) {
+                        document.getElementById("errorMessage").innerText = data.error_message;
+                    } else {
+                        const recognizedTextsDiv = document.getElementById("recognizedTexts");
+                        const translationTextsDiv = document.getElementById("translationTexts");
+
+                        recognizedTextsDiv.innerHTML = '';
+                        translationTextsDiv.innerHTML = '';
+
+                        data.recognized_texts.forEach(text => {
+                            const p = document.createElement('p');
+                            p.innerText = text;
+                            recognizedTextsDiv.appendChild(p);
+                        });
+
+                        data.translation_texts.forEach(text => {
+                            const p = document.createElement('p');
+                            p.innerText = text;
+                            translationTextsDiv.appendChild(p);
+                        });
+
+                        if (data.audio_path && data.audio_path !== lastPlayedAudio) {
+                            const audioElement = document.getElementById("translationAudio");
+                            audioElement.src = `/temporales/${data.audio_path.split('/').pop()}`;
+                            audioElement.style.display = "block";
+                            audioElement.play();
+                            lastPlayedAudio = data.audio_path;  // Actualizar la variable con el último archivo reproducido
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function stopCapture() {
+            clearInterval(captureInterval);
+            fetch('/stop_capture')
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>
