@@ -7,6 +7,31 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='build/css/sidebar.css') }}">
 </head>
 
+  <div class="clearfix"></div>
+
+  <!-- sidebar menu -->
+  <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+    <div class="menu_section">
+      <h3>General</h3>
+      <ul class="nav side-menu">
+        <li><a href="/dashboard/{{id}}"><i class="fa fa-home"></i> Home</span></a></li>
+        <li><a href="/plans/{{id}}" ><i class="fa fa-credit-card"></i>Planes</span></a>
+        </li>
+
+        <li><a><i class="fa fa-language"></i> Traducción <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="/presencial">Presencial</a></li>
+            <li><a href="/audio">Audio</a></li>
+            <li><a href="/video">Video</a></li>
+          </ul>
+        </li>
+        <li><a href="/suscripcion/{{id}}"><i class="fa fa-table"></i> Mi cuenta</a>
+        </li>
+<!--         <li><a><i class="fa fa-bar-chart-o"></i> Data Presentation</a>
+        </li>
+        <li><a><i class="fa fa-clone"></i>Layouts </a>
+        </li> -->
+      </ul>
 <body>
   <div class="left_col scroll-view">
     <div class="navbar nav_title" style="border: 0;">

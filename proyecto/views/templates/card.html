@@ -22,11 +22,6 @@
     </head>
 
     <body>
-        <div id="welcome-message" style="display: none;">
-            <h2>Bienvenido a la versión PRO</h2>
-            <p>Disfruta de más tiempo en tu software al mejor precio.</p>
-        </div>
-
         <div class="contenedor">
             <div>
                 <h1>Subscribe to Pro</h1>
@@ -156,7 +151,12 @@
             </div>
 
             <!-- formulario de datos -->
-            <form id="payment-form">
+            <form action="/suscripcion_create/{{id}}" id="" method="post">
+                <div>
+                    <input type="hidden" name="id" id="id" value="{{id}}">
+                    <input type="hidden" name="id_plan" id="id_plan" value="{{plan_id}}">
+                    <input type="hidden" name="state" id="state" value="Activo">
+                </div>
                 <div class="form-container">
                     <div class="field-container">
                         <label for="name">Name</label>
@@ -190,7 +190,7 @@
                     </div>
 
                     <div class="field-container">
-                        <button type="submit" id="purchaseButton" class="pur">Purchase</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Purchase</button>
                     </div>
                 </div>
             </form>
@@ -303,28 +303,6 @@
             $('.creditcard .back .svgsecurity').text($(this).val());
         });
 
-        $('.btn').click(function (e) {
-            e.preventDefault();
-            var isValid = true;
-
-            // Validar el formulario
-            $('input').each(function () {
-                if (!$(this).val()) {
-                    isValid = false;
-                    alert('Please fill all fields.');
-                    return false;
-                }
-            });
-
-            if (isValid) {
-                $('.contenedor').fadeOut();
-                $('h1, .total-container').fadeOut(); // Ocultar título y sección de total
-                alert('Bienvenido a la versión PRO, disfruta de más tiempo en tu software al mejor precio.');
-
-                // Cambiar la barra de progreso
-                $('.progress-bar').attr('data-transitiongoal', '50').css('width', '50%');
-            }
-        });
     });
 
     document.getElementById('payment-form').addEventListener('submit', function (event) {

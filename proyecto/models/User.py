@@ -65,6 +65,12 @@ class Plan(db.Model):
     
     subscriptions = db.relationship('Subscription', backref='plan', lazy=True)
 
+    def __init__(self, name, description, monthly_price):
+        self.name = name
+        self.description = description
+        self.monthly_price =monthly_price
+        
+
 class Subscription(db.Model):
     __tablename__ = 'subscriptions'
     id = db.Column(db.Integer, primary_key=True)

@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, session,
 import threading
 from datetime import datetime
 # importamos los controladores de Usuario
-from ..controllers import UserController, VideoController, AudioController, PresencialController
+from ..controllers import UserController, VideoController, AudioController, PresencialController, SuscripcionController
 from ..controllers import PlansController
 # importamos los Modelos de usuario
 from ..models.User import User, Plan
@@ -57,11 +57,17 @@ def home_():
     if User.query.filter_by(email=user.email).first():
         print("Usuario Admin ya esta registrado")
         flash('Usuario Admin ya esta registrado', 'danger')
+        
     else:   
         sql = "INSERT INTO roles (id, rol) VALUES (%s, %s);"
         _fetch_none(sql, (1, 'Administrador'))
         _fetch_none(sql, (2, 'Usuario'))
+        sql2 = "INSERT INTO plans (id, name, description, monthly_price) VALUES (%s, %s, %s, %s)"
+        _fetch_none(sql2,(1,'Basico', 'Este plan es el mas basico', 70))
+        _fetch_none(sql2,(2,'Intermedio', 'Este plan es el mas Intermedio', 120))
+        _fetch_none(sql2,(3,'Profesional', 'Este plan es el mas Profesional', 150))
         UserController.create(user)
+
     return render_template("home.html")
 
 
@@ -94,7 +100,8 @@ def login():
                     return redirect(url_for('views.dashboard_admin'))
                    # return render_template("dashboardAdmin.html")
                 else:
-                    return redirect(url_for('views.dashboard'))  # redirige dashboard que corresponde//////chinin estuvo aquí
+                    id = UserController.id_user(usuario)[0]
+                    return redirect(url_for('views.dashboard', id = id))  # redirige dashboard que corresponde//////chinin estuvo aquí
             else:
                 flash("Usuario o Contraseña invalida")  # Contraseña invalida
                 return render_template("login.html")
@@ -123,10 +130,10 @@ def register():
     return render_template('register.html')
 
 
-@home.route('/dashboard')
-def dashboard():
+@home.route('/dashboard/<int:id>',methods=['GET', 'POST'])
+def dashboard(id):
     if 'Esta_logeado' in session:
-        return render_template('dashboard.html')
+        return render_template('dashboard.html', id = id)
     return redirect(url_for('views.login'))
 
 @home.route('/dashboard_admin')
@@ -144,10 +151,12 @@ def logout():
     return redirect(url_for('views.login'))
 
 
-@home.route('/plans/')
-def plans():
+@home.route('/plans/<int:id>',methods=['GET', 'POST'])
+def plans(id):
     if 'Esta_logeado' in session:  # Si el usuario esta logeado entonces realiza funcionalidades permitidas
-        return render_template("plans.html")
+        planes = PlansController.getAll()
+        print(planes)  # Verificación de datos
+        return render_template("plans.html", plans=planes, id =id)
     return redirect(url_for('views.login'))
 
 @home.route('/admin_plans/')
@@ -198,10 +207,32 @@ def delete_plan(id):
         return redirect(url_for('views.admin_plans'))
     return redirect(url_for('views.login'))
 
+@home.route('/admin_users', methods=['GET', 'POST'])
+def admin_users():
+    if 'Esta_logeado' in session:
+        users = UserController.getAll()
+        return render_template('admin_users_index.html', users=users)
+    return redirect(url_for('views.login'))
 
-@home.route('/card/')
-def card():
-    return render_template("card.html")
+@home.route('/admin_users/update/<int:id>', methods=['GET', 'POST'])
+def update_user_state(id):
+    if 'Esta_logeado' in session:
+        if request.method == 'POST':
+            user_data = {
+                'id': id,
+                'state': request.form['state']
+            }
+            print("Form submitted:", user_data)
+            UserController.update_state(user_data)
+            return redirect(url_for('views.admin_users'))
+        user = UserController.getById(id)
+        return render_template("admin_users.html", user=user)
+    return redirect(url_for('views.login'))
+
+
+@home.route('/card/<int:id>/<int:plan_id>', methods=['GET', 'POST'])
+def card(id, plan_id):
+    return render_template("card.html", id = id, plan_id = plan_id)
 
 
 @home.route('/cardBusiness/')
@@ -342,6 +373,32 @@ def descargar_audio(filename):
     if file_path:
         return send_file(file_path, as_attachment=True)
     return "Archivo no encontrado", 404
+
+@home.route('/suscripcion_create/<int:id>', methods=['POST', 'GET'])
+def suscripcion_create(id):
+    if 'Esta_logeado' in session:
+        if request.method == 'POST':
+            subs = {
+                'id_user': request.form['id'],
+                'id_plan': request.form['id_plan'],
+                'start_date': datetime.now(),
+                'state': request.form['state']
+            }
+            SuscripcionController.create(subs)
+            data = SuscripcionController.getById(id)
+            print(data)
+            return render_template('suscripcion.html', id = id, data = data)
+        return render_template("plans.html", id = id)
+    return redirect(url_for('views.login'))
+
+
+@home.route('/suscripcion/<int:id>', methods=['POST', 'GET'])
+def suscripcion(id):
+    if 'Esta_logeado' in session:
+        data = SuscripcionController.getById(id)
+        return render_template('suscripcion.html', id = id, data = data)
+    return redirect(url_for('views.login'))
+
 
 ######## Funcionalidad Presencial #########################
 

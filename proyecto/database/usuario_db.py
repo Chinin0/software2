@@ -29,6 +29,31 @@ def login(usuario: User) -> User:
     if row !=None:
         usuario = User(row[0],row[1], (User.check_password(row[2],(usuario.password_hash))),row[3], row[4], row[5])
         print(usuario)
+
         return usuario  # El usuario se encuentra en la BD_Lab
+    else:
+        return None # no hay usuario
+    
+def update_state(user_data: dict) -> None:
+    sql = "UPDATE users SET state = %s WHERE id = %s"
+    _fetch_none(sql, (user_data['state'], user_data['id']))
+
+def getById(user_id: int) -> tuple:
+    sql = "SELECT id, name, email, state FROM users WHERE id = %s"
+    result = _fetch_one(sql, (user_id,))
+    return result
+
+
+
+def getAll() -> list:
+    sql = "SELECT id, name, email, state FROM users"
+    results = _fetch_all(sql, ())  # Pasa una tupla vacía como segundo argumento
+    return results
+
+def id_user(usuario: User) -> tuple:
+    sql = " SELECT id, name, email, password_hash, id_rol, state,create_at FROM users WHERE email = '{}' ".format(usuario.email) #la variable del modelo User
+    row = _fetch_one(sql,None)
+    if row !=None:
+        return row  # El usuario se encuentra en la BD_Lab
     else:
         return None # no hay usuario
