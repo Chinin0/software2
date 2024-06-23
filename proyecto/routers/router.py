@@ -1,11 +1,16 @@
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for, send_file, Flask
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for, send_file, Flask, jsonify, send_from_directory
+import threading
 from datetime import datetime
 # importamos los controladores de Usuario
-from ..controllers import UserController, VideoController, AudioController
+from ..controllers import UserController, VideoController, AudioController, PresencialController
+from ..controllers import PlansController
 # importamos los Modelos de usuario
-from ..models.User import User
+from ..models.User import User, Plan
 import os
+import time
 from werkzeug.utils import secure_filename
+from proyecto.database.connection import _fetch_all,_fecth_lastrow_id,_fetch_none,_fetch_one  #las funciones 
+from werkzeug.security import generate_password_hash
 
 # Funciones de la funcionalidad audio
 AudioController.transcribir_y_traducir, AudioController.mostrar_codigos_idiomas, AudioController.limpiar_archivos_temporales, AudioController.TEMP_DIR
@@ -13,9 +18,13 @@ AudioController.transcribir_y_traducir, AudioController.mostrar_codigos_idiomas,
 # Funciones de la funcionalidad Video
 VideoController.convertir_video_a_wav, VideoController.transcribir_y_traducir, VideoController.mostrar_codigos_idiomas, VideoController.limpiar_archivos_temporales, VideoController.TEMP_DIR
 
+# Funciones de la funcionalidad Presencial
+PresencialController.recognize_and_translate, PresencialController.get_available_languages, PresencialController.voice_queue
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # Configurar la carpeta de archivos temporales
 app.config['TEMP_DIR'] = 'archivostemporales'
 
@@ -26,6 +35,18 @@ home = Blueprint("views", __name__)
 # funciones decoradas, (para que puedan ser usadas en otro archivo)
 @home.route('/', methods=['GET'])
 def home_():
+    """
+    Cargar Usuario Admin
+    """
+    user = User(name="admin", email="admin@gmail.com",password = generate_password_hash("12345678"), id_rol = 1, state= "activo", create_at= datetime.now() )
+    if User.query.filter_by(email=user.email).first():
+        print("Usuario Admin ya esta registrado")
+        flash('Usuario Admin ya esta registrado', 'danger')
+    else:   
+        sql = "INSERT INTO roles (id, rol) VALUES (%s, %s);"
+        _fetch_none(sql, (1, 'Administrador'))
+        _fetch_none(sql, (2, 'Usuario'))
+        UserController.create(user)
     return render_template("home.html")
 
 
@@ -35,7 +56,7 @@ def login():
     if request.method == 'POST':
         data = request.form  # guardo todos los datos ingresados por formulario de la vista
         print('------datos ingresados por formulario-------')
-        usuario = User(0, data['email'], data['password'], 0)  # capturo los datos del formulario y mando al modelo User
+        usuario = User(0, data['email'], data['password'],0 , 0, 0)  # capturo los datos del formulario y mando al modelo User
         # los 0 son nulos porque no metemos desde formulario
 
         logged_user = UserController.login(usuario)
@@ -51,8 +72,14 @@ def login():
                 session['name'] = logged_user.name
                 session['email'] = logged_user.email
                 session['password'] = logged_user.password_hash
+                session['id_rol'] = logged_user.id_rol
+                session['state'] = logged_user.state
                 session['create_at'] = logged_user.create_at
-                return redirect(url_for('views.dashboard'))  # redirige dashboard que corresponde//////chinin estuvo aquí
+                if(logged_user.id_rol == 1):
+                    return redirect(url_for('views.dashboard_admin'))
+                   # return render_template("dashboardAdmin.html")
+                else:
+                    return redirect(url_for('views.dashboard'))  # redirige dashboard que corresponde//////chinin estuvo aquí
             else:
                 flash("Usuario o Contraseña invalida")  # Contraseña invalida
                 return render_template("login.html")
@@ -71,7 +98,7 @@ def register():
         data = request.form
         print('------datos ingresados por formulario-------')
         print(data)
-        usuario = User(data['name'], data['email'], data['password'], time_creacion)
+        usuario = User(data['name'], data['email'], data['password'], data['id_rol'], data['state'], time_creacion)
         # capturo los datos del formulario y mando al modelo User
         # los 0 son nulos porque no metemos desde formulario
         UserController.create(usuario)
@@ -87,6 +114,11 @@ def dashboard():
         return render_template('dashboard.html')
     return redirect(url_for('views.login'))
 
+@home.route('/dashboard_admin')
+def dashboard_admin():
+    if 'Esta_logeado' in session:
+        return render_template('dashboardAdmin.html')
+    return redirect(url_for('views.login'))
 
 @home.route('/logout')
 def logout():
@@ -101,6 +133,54 @@ def logout():
 def plans():
     if 'Esta_logeado' in session:  # Si el usuario esta logeado entonces realiza funcionalidades permitidas
         return render_template("plans.html")
+    return redirect(url_for('views.login'))
+
+@home.route('/admin_plans/')
+def admin_plans():
+    if 'Esta_logeado' in session:  # Si el usuario está logeado entonces realiza funcionalidades permitidas
+        planes = PlansController.getAll()
+        print(planes)  # Verificación de datos
+        return render_template("admin_plans.html", plans=planes)
+    return redirect(url_for('views.login'))
+
+
+@home.route('/admin_plans/create', methods=['GET', 'POST'])
+def create_plan():
+    if 'Esta_logeado' in session:
+        if request.method == 'POST':
+            plan_data = {
+                'name': request.form['name'],
+                'description': request.form['description'],
+                'monthly_price': request.form['monthly_price']
+            }
+            PlansController.create(plan_data)
+            return redirect(url_for('views.admin_plans'))
+        return render_template("create_plan.html")
+    return redirect(url_for('views.login'))
+
+
+@home.route('/admin_plans/update/<int:id>', methods=['GET', 'POST'])
+def update_plan(id):
+    if 'Esta_logeado' in session:
+        if request.method == 'POST':
+            plan_data = {
+                'id': id,
+                'name': request.form['name'],
+                'description': request.form['description'],
+                'monthly_price': request.form['monthly_price']
+            }
+            PlansController.update(plan_data)
+            return redirect(url_for('views.admin_plans'))
+        plan = PlansController.getById(id)
+        return render_template("update_plan.html", plan=plan)
+    return redirect(url_for('views.login'))
+
+
+@home.route('/admin_plans/delete/<int:id>', methods=['POST'])
+def delete_plan(id):
+    if 'Esta_logeado' in session:
+        PlansController.delete(id)
+        return redirect(url_for('views.admin_plans'))
     return redirect(url_for('views.login'))
 
 
@@ -147,11 +227,7 @@ def update_profile():
     return redirect(url_for('views.login'))
 
 
-@home.route('/presencial/')
-def presencial():
-    return render_template("presencial.html")
-
-
+######## Funcionalidad Audio #################################
 @home.route('/audio/')
 def audio():
     return render_template("audio.html", idiomas=IDIOMAS)
@@ -197,6 +273,9 @@ def descargar_audioFile(filename):
     if file_path:
         return send_file(file_path, as_attachment=True)
     return "Archivo no encontrado", 404
+
+
+######### Funcionalidad Video ##################################
 
 @home.route('/video/')
 def index():
@@ -249,6 +328,69 @@ def descargar_audio(filename):
         return send_file(file_path, as_attachment=True)
     return "Archivo no encontrado", 404
 
+######## Funcionalidad Presencial #########################
+
+shared_data = {
+    "capture_audio": False,
+    "recognized_texts": [],
+    "translation_texts": [],
+    "error_message": None,
+    "speak_translations": False,
+    "audio_path": None,
+    "audio_processed": []  # Lista para almacenar los audios procesados
+}
+
+@home.route('/presencial')
+def presencial():
+    languages = PresencialController.get_available_languages()
+    return render_template('presencial.html', languages=languages)
+
+@home.route('/start_capture', methods=['POST'])
+def start_capture():
+    global shared_data
+    source_lang = request.json['sourceLang']
+    target_lang = request.json['targetLang']
+    speak_translations = request.json.get('speakTranslations', False)
+    shared_data["capture_audio"] = True
+    shared_data["speak_translations"] = speak_translations
+
+    capture_audio_thread, error_message = PresencialController.recognize_and_translate(source_lang, target_lang, shared_data)
+    shared_data["error_message"] = error_message
+
+    def run_in_background():
+        audio_thread = threading.Thread(target=capture_audio_thread, args=(shared_data,))
+        audio_thread.start()
+        audio_thread.join()
+
+    threading.Thread(target=run_in_background).start()
+
+    return jsonify({"status": "Capture started"})
+
+@home.route('/get_translations')
+def get_translations():
+    global shared_data
+    recognized_texts = shared_data['recognized_texts']
+    translation_texts = shared_data['translation_texts']
+    error_message = shared_data['error_message']
+    audio_path = shared_data['audio_path']
+    
+    return jsonify({
+        "recognized_texts": recognized_texts,
+        "translation_texts": translation_texts,
+        "error_message": error_message,
+        "audio_path": audio_path
+    })
+
+@home.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@home.route('/stop_capture')
+def stop_capture():
+    global shared_data
+    shared_data["capture_audio"] = False
+    PresencialController.voice_queue.put(None)  # Signal the voice worker to exit
+    return "Audio capture stopped."
 
 if __name__ == '__main__':
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
