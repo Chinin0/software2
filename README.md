@@ -75,6 +75,15 @@ Paso no necesario hacerlo porque si ya instalaste los requirements.txt : pip ins
 
 ----
 
+## actualizar la base de datos
+
+
+`flask db downgrade`
+`flask db upgrade`
+`flask db migrate -m "actualizacion"`
+`flask db upgrade`
+----
+
 ## Uso de Git y Github para subir sus cambios al repositorio
 
 `git init`
