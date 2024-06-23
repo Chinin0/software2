@@ -74,22 +74,24 @@
                         const recognizedTextsDiv = document.getElementById("recognizedTexts");
                         const translationTextsDiv = document.getElementById("translationTexts");
 
-                        // Append new texts without clearing the old ones
-                        data.recognized_texts.slice(recognizedTextsDiv.childElementCount).forEach(text => {
-                            const p = document.createElement("p");
-                            p.textContent = text;
+                        recognizedTextsDiv.innerHTML = '';
+                        translationTextsDiv.innerHTML = '';
+
+                        data.recognized_texts.forEach(text => {
+                            const p = document.createElement('p');
+                            p.innerText = text;
                             recognizedTextsDiv.appendChild(p);
                         });
-                        data.translation_texts.slice(translationTextsDiv.childElementCount).forEach(text => {
-                            const p = document.createElement("p");
-                            p.textContent = text;
+
+                        data.translation_texts.forEach(text => {
+                            const p = document.createElement('p');
+                            p.innerText = text;
                             translationTextsDiv.appendChild(p);
                         });
 
-                        // Reproducir el archivo de audio si existe y no es el mismo que el último reproducido
                         if (data.audio_path && data.audio_path !== lastPlayedAudio) {
                             const audioElement = document.getElementById("translationAudio");
-                            audioElement.src = `/uploads/${data.audio_path.split('/').pop()}`;
+                            audioElement.src = `/temporales/${data.audio_path.split('/').pop()}`;
                             audioElement.style.display = "block";
                             audioElement.play();
                             lastPlayedAudio = data.audio_path;  // Actualizar la variable con el último archivo reproducido
@@ -102,19 +104,16 @@
         }
 
         function stopCapture() {
+            clearInterval(captureInterval);
             fetch('/stop_capture')
                 .then(response => response.text())
                 .then(data => {
                     console.log(data);
-                    clearInterval(captureInterval); // Stop updates
                 })
                 .catch(error => {
-                    console.error('Error stopping capture:', error);
+                    console.error('Error:', error);
                 });
         }
     </script>
 </body>
 </html>
-
-
- 

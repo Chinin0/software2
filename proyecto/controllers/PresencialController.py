@@ -19,9 +19,9 @@ def voice_worker():
         if text is None:
             break
         tts = gTTS(text, lang='en')  # Ajusta el idioma según tus necesidades
-        audio_path = f'uploads/translation_current.mp3'
+        audio_path = os.path.join('temporales', 'translation_current.mp3')
         tts.save(audio_path)
-        os.system(f"mpg123 {audio_path}")
+        # os.system(f"mpg123 {audio_path}")  # Comentado si no es necesario
         voice_queue.task_done()
 
 voice_thread = threading.Thread(target=voice_worker)
@@ -49,13 +49,14 @@ def recognize_and_translate(source_lang, target_lang, shared_data):
                         print("You said: {}".format(text))
                         print("Translation: {}".format(translation))
 
-                        # Verificar y crear la carpeta 'uploads' si no existe
-                        if not os.path.exists('uploads'):
-                            os.makedirs('uploads')
+                        # Verificar y crear la carpeta 'temporales' si no existe
+                        if not os.path.exists('temporales'):
+                            os.makedirs('temporales')
 
                         # Guardar la traducción como archivo de audio
-                        translation_audio = gTTS(translation, lang=target_lang)
-                        audio_path = f'uploads/translation_{len(shared_data["translation_texts"])}.mp3'
+                        audio_filename = f'translation_{len(shared_data["translation_texts"])}.mp3'
+                        audio_path = os.path.join('temporales', audio_filename)
+                        translation_audio = gTTS(translation, lang=target_lang)  # Crear el archivo de audio aquí
                         translation_audio.save(audio_path)
 
                         # Verificar si el archivo de audio se ha guardado correctamente
@@ -63,7 +64,7 @@ def recognize_and_translate(source_lang, target_lang, shared_data):
                             print("El archivo de audio no se ha guardado correctamente.")
                         else:
                             print("El archivo de audio se ha guardado correctamente en", audio_path)
-                            shared_data['audio_path'] = audio_path
+                            shared_data['audio_path'] = audio_filename
                             shared_data['audio_processed'].append(audio_path)  # Añadir a los procesados
 
                         # Enqueue the translation for speaking
@@ -78,4 +79,3 @@ def recognize_and_translate(source_lang, target_lang, shared_data):
                     print("Error: {0}".format(e))
 
     return capture_audio_thread, error_message
-

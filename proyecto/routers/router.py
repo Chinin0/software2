@@ -28,6 +28,21 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # Configurar la carpeta de archivos temporales
 app.config['TEMP_DIR'] = 'archivostemporales'
 
+
+################################################################
+app.config['UPLOAD_TRADUCCION'] = os.path.join(os.getcwd(), 'temporales')
+os.makedirs(app.config['UPLOAD_TRADUCCION'], exist_ok=True)
+
+shared_data = {
+    "capture_audio": False,
+    "recognized_texts": [],
+    "translation_texts": [],
+    "error_message": None,
+    "speak_translations": False,
+    "audio_path": None,
+    "audio_processed": []  # Lista para almacenar los audios procesados
+}
+
 IDIOMAS = VideoController.mostrar_codigos_idiomas()
 
 home = Blueprint("views", __name__)
@@ -330,17 +345,7 @@ def descargar_audio(filename):
 
 ######## Funcionalidad Presencial #########################
 
-shared_data = {
-    "capture_audio": False,
-    "recognized_texts": [],
-    "translation_texts": [],
-    "error_message": None,
-    "speak_translations": False,
-    "audio_path": None,
-    "audio_processed": []  # Lista para almacenar los audios procesados
-}
-
-@home.route('/presencial')
+@home.route('/presencial/')
 def presencial():
     languages = PresencialController.get_available_languages()
     return render_template('presencial.html', languages=languages)
@@ -381,9 +386,9 @@ def get_translations():
         "audio_path": audio_path
     })
 
-@home.route('/uploads/<filename>')
+@home.route('/temporales/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    return send_from_directory(app.config['UPLOAD_TRADUCCION'], filename)
 
 @home.route('/stop_capture')
 def stop_capture():
@@ -397,4 +402,6 @@ if __name__ == '__main__':
         os.makedirs(app.config['UPLOAD_FOLDER'])
     if not os.path.exists(app.config['TEMP_DIR']):
         os.makedirs(app.config['TEMP_DIR'])
+    if not os.path.exists(app.config['UPLOAD_TRADUCCION']):
+        os.makedirs(app.config['UPLOAD_TRADUCCION'])
     app.run(debug=True)
