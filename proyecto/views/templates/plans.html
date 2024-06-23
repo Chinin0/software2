@@ -3,129 +3,134 @@
 {% block title %} Dashboard 1 {% endblock title %}
 
 {% block stylesheets %}
-
+{{ super() }}
 {% endblock stylesheets %}
 
 {% block content %}
 <div class="right_col" role="main">
-  <!DOCTYPE html>
-  <html lang="en">
+  <div class="plans-container py-8 px-4">
+    <h4 class="text-3xl font-bold text-center mb-8">Plans</h4>
+    <div class="plans-grid">
+      {% for plan in plans %}
+      <div class="plan-card">
+        <div>
+          <h2 class="plan-name">{{ plan.name }}</h2>
+          <h3 class="plan-description">{{ plan.description }}</h3>
+          <h2 class="plan-price">${{ plan.monthly_price }} USD</h2>
+          <div style="text-align: center;">
+            <img src="../static/images/plan.jpg" alt="" width="60%">
+           </div>
+        
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='build/css/plans.css')}}">
+        </div>
+        <div class="plan-details">
+          <ul>
+            <li>Detail 1 for {{ plan.name }}</li>
 
-    <title>Planes</title>
-  </head>
-
-  <body>
-    <div class="scrollable-section">
-      <h4>Plans</h4>
-      <div class="tablabasic">
-        <h2>Basic</h2>
-        <h3>Your current plan</h3>
-        <h3 id="tiempo">282 mins left</h5>
-          <h3 id="dias">Minutes reset in 28 days</h5>
-            <!-- <h5 id="primerh5">AI meeting assistant records and transcribes in real time</h5>
-    <h5>Joins Zoom, MS Teams, and Google Meet to automatically write and share notes</h5>
-    <h5>Automatically captures slides and generates meeting summaries</h5>
-    <h5>300 monthly transcription minutes; 30 minutes per conversation; Import and transcribe 3* audio or video files
-      lifetime</h5> -->
-            <ul id="ulbasic">
-              <li id="item">AI meeting assistant records and transcribes in real time</li>
-              <li id="item">Joins Zoom, MS Teams, and Google Meet to automatically write and share notes</li>
-              <li id="item">Automatically captures slides and generates meeting summaries</li>
-              <li id="item">300 monthly transcription minutes; 30 minutes per conversation; Import and transcribe 3*
-                audio
-                or video files
-                lifetime</li>
-            </ul>
-            <p></p>
+          </ul>
+          <a href="/card/{{id}}/{{plan.id}}" class="plan-buy-button">Buy Now</a>
+        </div>
       </div>
-      <div class="contenedor">
-
-        <div class="tabla">
-          <h2>Pro</h2>
-          <h3>For individuals and small teams who need more minutes and features</h3>
-          <h2 id="precio">$10 USD</h2>
-          <h3 id="userMonth">/user/month</h3>
-          <h3 id="userMonth">billed annually</h3>
-          <a href="/card" class="boton">Buy Now</a>
-          <!-- <h5>Everything in Basic +</h5>
-      <h5>Add teammates to your workspace (maximum of 5 paid seats)</h5>
-      <h5>Team features: shared custom vocabulary; tag speakers; assign action items to teammates</h5>
-      <h5>Advanced search, export, and playback</h5>
-      <h5>1200 monthly transcription minutes; 90 minutes per conversation</h5>
-      <h5>Import and transcribe 10* audio or video files per month</h5> -->
-          <ul>
-            <li id="item">Everything in Basic +</li>
-            <li id="item">Add teammates to your workspace (maximum of 5 paid seats)</li>
-            <li id="item">Team features: shared custom vocabulary; tag speakers; assign action items to teammates</li>
-            <li id="item">Advanced search, export, and playback</li>
-            <li id="item">1200 monthly transcription minutes; 90 minutes per conversation</li>
-            <li id="item">Import and transcribe 10* audio or video files per month</li>
-          </ul>
-
-        </div>
-        <div class="tabla">
-          <h2>Business</h2>
-          <h3>For small teams and organizations that need to share & collaborate</h3>
-          <h2 id="precio">$20 USD</h2>
-          <h3 id="userMonth">/user/month</h3>
-          <h3 id="userMonth">billed annually</h3>
-          <a href="/cardBusiness" class="boton">Buy Now</a>
-          <!-- <h5>Everything in Pro +</h5>
-      <h5>Team features: shared custom vocabulary and speakers, assign action items to teammates</h5>
-      <h5>Joins virtual meetings when you are triple booked</h5>
-      <h5>Admin features: usage analytics, centralized billing, prioritized support</h5>
-      <h5>6000 monthly transcription minutes; 4 hours per conversation</h5>
-      <h5>Import and transcribe unlimited* audio or video files per month</h5> -->
-          <ul>
-            <li id="item">Everything in Pro +</li>
-            <li id="item">Team features: shared custom vocabulary and speakers, assign action items to teammates</li>
-            <li id="item">TJoins virtual meetings when you are triple booked</li>
-            <li id="item">Admin features: usage analytics, centralized billing, prioritized support</li>
-            <li id="item">6000 monthly transcription minutes; 4 hours per conversation</li>
-            <li id="item">Import and transcribe unlimited* audio or video files per month</li>
-          </ul>
-
-        </div>
-        <div class="tabla">
-          <h2>Basico</h2>
-          <h3>For large organizations that need additional security, control, and support</h3>
-          <a href="" class="boton" id="enterprise">Contact Sales</a>
-          <!-- <h5>Everything in Business +</h5>
-      <h5>Single Sign-On (SSO)</h5>
-      <h5>Organization-wide deployment</h5>
-      <h5>Domain capture</h5>
-      <h5>Advanced security and compliance controls</h5> -->
-          <ul>
-            <li id="item">Everything in Business +</li>
-            <li id="item">Single Sign-On (SSO)</li>
-            <li id="item">Organization-wide deployment</li>
-            <li id="item">Domain capture</li>
-            <li id="item">Advanced security and compliance controls</li>
-          </ul>
-        </div>
-        <!-- <div class="tablabasic">
-      <h2>Basic</h2>
-      <h3>Your current plan</h3>
-      <h5 id="tiempo">282 mins left</h5>
-      <h5 id="dias">Minutes reset in 28 days</h5>
-      <h5 id="primerh5">AI meeting assistant records and transcribes in real time</h5>
-      <h5>Joins Zoom, MS Teams, and Google Meet to automatically write and share notes</h5>
-      <h5>Automatically captures slides and generates meeting summaries</h5>
-      <h5>300 monthly transcription minutes; 30 minutes per conversation; Import and transcribe 3* audio or video files
-        lifetime</h5>
-      <p></p>
-    </div> -->
-      </div>
+      {% endfor %}
     </div>
-  </body>
-
-  </html>
+  </div>
 </div>
+
+<style>
+  .plans-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .plans-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .plans-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .plans-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .plan-card {
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .plan-card h2,
+  .plan-card h3 {
+    margin: 0 0 0.5rem 0;
+  }
+
+  .plan-card .plan-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .plan-card .plan-description {
+    color: #4a5568;
+  }
+
+  .plan-card .plan-price {
+    font-size: 1.875rem;
+    font-weight: 700;
+  }
+
+  .plan-card .plan-billing {
+    color: #718096;
+  }
+
+  .plan-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .plan-details ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    color: #374151;
+    margin-bottom: 1rem;
+  }
+
+  .plan-details ul li {
+    margin-bottom: 0.5rem;
+  }
+
+  .plan-buy-button {
+    background-color: #3b82f6;
+    color: #ffffff;
+    text-align: center;
+    padding: 1rem 2rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.3s ease-in-out;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .plan-buy-button:hover {
+    background-color: #2563eb;
+  }
+</style>
+
+
+
 {% endblock content %}
 
 {% block javascripts %}
