@@ -48,6 +48,8 @@
                 padding: 10px;
                 /* Añade espacio interior para mayor comodidad */
             }
+
+            
         </style>
     </head>
 
@@ -60,7 +62,8 @@
                             <div class="drop-zone" id="dropZone">
                                 <span class="drop-zone-text">Arrastra y suelta tu video aquí o haz clic para
                                     seleccionarlo
-                                    <input type="file" id="videoFile" name="videoFile" accept="video/*" class="file-input" required>
+                                    <input type="file" id="videoFile" name="videoFile" accept="video/*"
+                                        class="file-input" required>
                                 </span>
                             </div>
 
@@ -89,12 +92,10 @@
 
                             <!-- seleccionar entrada y salidas -->
 
-                            <button type="submit">Subir Video</button><br>
-                            <br>
+                            <button type="submit">Subir Video</button>
 
-                            <a href="/video"
-                                style="background-color: #28a745; border-radius: 5px; padding: 10px; color: white;">Nuevo
-                                Video</a>
+                            <a class="video_nuevo" href="/video">Nuevo Video
+                            </a>
 
                             <!-- paneles de texto completo -->
                             <div class="panel-container">

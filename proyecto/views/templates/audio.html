@@ -97,6 +97,18 @@
                 transition: background-color 0.3s;
                 margin-top: 0px;
             }
+            
+            .audio_button{
+                padding: 12px 20px;
+                background-color: #28a745;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+                margin-top: 0px;
+
+            }
 
             button:hover {
                 background-color: #218838;
@@ -211,12 +223,6 @@
                                         <option value="{{ code }}">{{ name }}</option>
                                         {% endfor %}
                                     </select>
-
-                                    <!-- <label for="reproducir_audio">¿Desea escuchar el audio traducido?</label><br><br>
-                            <select name="reproducir_audio" id="reproducir_audio">
-                                <option value="n">No</option>
-                                <option value="s">Sí</option>
-                            </select><br><br> -->
                                 </div>
                             </div>
                             <div id="audioPreview" class="audioPreview">
@@ -224,9 +230,8 @@
                             </div>
 
                             <button type="submit">Subir Audio</button>
-                            <a href="/audio"
-                                style="background-color: #28a745; border-radius: 5px; padding: 10px; color: white;">Nuevo
-                                Audio</a>
+                            <a class="audio_button" href="/audio">Nuevo Audio</a>
+                            
                         </form>
                         <div class="panel-container">
                             <div class="text-panel">

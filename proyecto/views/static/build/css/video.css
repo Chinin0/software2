@@ -64,6 +64,18 @@ button {
     margin-top: 0px;
 }
 
+.video_nuevo {
+    padding: 12px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 0px;
+
+}
+
 button:hover {
     background-color: #218838;
 }
