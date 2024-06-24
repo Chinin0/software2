@@ -194,19 +194,19 @@
                             <div class="drop-zone" id="dropZone">
                                 <span class="drop-zone-text">Arrastra y suelta tu Audio aquí o haz clic para
                                     seleccionarlo</span>
-                                <input type="file" id="audioFile" name="audioFile" accept="audio/*" class="file-input">
+                                <input type="file" id="audioFile" name="audioFile" accept="audio/*" class="file-input" required>
                             </div>
                             <div class="contains">
                                 <div class="select-container">
-                                    <select name="idioma_entrada" id="idioma_entrada">
+                                    <select name="idioma_entrada" id="idioma_entrada" required>
                                         <option value="">Idioma Entrada</option>
                                         {% for code, name in idiomas.items() %}
                                         <option value="{{ code }}">{{ name }}</option>
                                         {% endfor %}
                                     </select>
 
-                                    <select name="idioma_salida" id="idioma_salida">
-                                        <option value="es">Idioma salida</option>
+                                    <select name="idioma_salida" id="idioma_salida" required>
+                                        <option value="">Idioma salida</option>
                                         {% for code, name in idiomas.items() %}
                                         <option value="{{ code }}">{{ name }}</option>
                                         {% endfor %}
@@ -224,6 +224,9 @@
                             </div>
 
                             <button type="submit">Subir Audio</button>
+                            <a href="/audio"
+                                style="background-color: #28a745; border-radius: 5px; padding: 10px; color: white;">Nuevo
+                                Audio</a>
                         </form>
                         <div class="panel-container">
                             <div class="text-panel">

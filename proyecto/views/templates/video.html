@@ -59,20 +59,23 @@
                         <form action="/upload-video" method="POST" enctype="multipart/form-data">
                             <div class="drop-zone" id="dropZone">
                                 <span class="drop-zone-text">Arrastra y suelta tu video aquí o haz clic para
-                                    seleccionarlo</span>
-                                <input type="file" id="videoFile" name="videoFile" accept="video/*" class="file-input">
+                                    seleccionarlo
+                                    <input type="file" id="videoFile" name="videoFile" accept="video/*" class="file-input" required>
+                                </span>
                             </div>
+
+
                             <div class="contains">
                                 <div class="select-container">
-                                    <select name="idioma_entrada" id="idioma_entrada">
+                                    <select name="idioma_entrada" id="idioma_entrada" required>
                                         <option value="">Idioma Entrada</option>
                                         {% for code, name in idiomas.items() %}
                                         <option value="{{ code }}">{{ name }}</option>
                                         {% endfor %}
                                     </select>
 
-                                    <select name="idioma_salida" id="idioma_salida">
-                                        <option value="es">Idioma Salida</option>
+                                    <select name="idioma_salida" id="idioma_salida" required>
+                                        <option value="">Idioma Salida</option>
                                         {% for code, name in idiomas.items() %}
                                         <option value="{{ code }}">{{ name }}</option>
                                         {% endfor %}
@@ -87,6 +90,11 @@
                             <!-- seleccionar entrada y salidas -->
 
                             <button type="submit">Subir Video</button><br>
+                            <br>
+
+                            <a href="/video"
+                                style="background-color: #28a745; border-radius: 5px; padding: 10px; color: white;">Nuevo
+                                Video</a>
 
                             <!-- paneles de texto completo -->
                             <div class="panel-container">
@@ -162,14 +170,6 @@
             }
         });
 
-        videoFileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                updateVideoPreview(file);
-                uploadForm.submit();  // Enviar el formulario automáticamente
-            }
-        });
-
         function updateVideoPreview(file) {
             videoElement.src = URL.createObjectURL(file);
             videoPreview.style.display = 'block';
@@ -189,9 +189,6 @@
             micButton.classList.add('bg-red');
         }
     });
-
-
-
 </script>
 
 
