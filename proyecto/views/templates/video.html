@@ -171,6 +171,14 @@
             }
         });
 
+        videoFileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                updateVideoPreview(file);
+                uploadForm.submit();  // Enviar el formulario automáticamente
+            }
+        });
+
         function updateVideoPreview(file) {
             videoElement.src = URL.createObjectURL(file);
             videoPreview.style.display = 'block';
