@@ -274,9 +274,9 @@ def update_profile():
 
 
 ######## Funcionalidad Audio #################################
-@home.route('/audio/')
-def audio():
-    return render_template("audio.html", idiomas=IDIOMAS)
+@home.route('/audio/<int:id>', methods=['POST', 'GET'])
+def audio(id):
+    return render_template("audio.html", id = id, idiomas=IDIOMAS)
 
 @home.route('/upload-audio', methods=['POST'])
 def upload_audio():
@@ -323,9 +323,9 @@ def descargar_audioFile(filename):
 
 ######### Funcionalidad Video ##################################
 
-@home.route('/video/')
-def index():
-    return render_template('video.html', idiomas=IDIOMAS)
+@home.route('/video/<int:id>', methods=['POST', 'GET'])
+def index(id):
+    return render_template('video.html', id = id, idiomas=IDIOMAS)
 
 
 @home.route('/upload-video', methods=['POST'])
@@ -357,7 +357,7 @@ def upload_video():
             audio_traduccion = resultado.get('audio_traduccion', '')
             print('Valor de audio_traduccion:', audio_traduccion)
 
-            return render_template('video.html', idiomas=IDIOMAS, transcripcion=resultado.get('texto', ''), traduccion=resultado.get('texto_traducido', ''), audio_traduccion=audio_traduccion)
+            return render_template('video.html',id = id, idiomas=IDIOMAS, transcripcion=resultado.get('texto', ''), traduccion=resultado.get('texto_traducido', ''), audio_traduccion=audio_traduccion)
             
     return redirect(request.url)
 
@@ -402,10 +402,10 @@ def suscripcion(id):
 
 ######## Funcionalidad Presencial #########################
 
-@home.route('/presencial/')
-def presencial():
+@home.route('/presencial/<int:id>')
+def presencial(id):
     languages = PresencialController.get_available_languages()
-    return render_template('presencial.html', languages=languages)
+    return render_template('presencial.html', id = id, languages=languages)
 
 @home.route('/start_capture', methods=['POST'])
 def start_capture():
