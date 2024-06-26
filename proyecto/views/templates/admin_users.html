@@ -21,8 +21,8 @@
     <div class="form-group">
       <label for="state">State</label>
       <select class="form-control" id="state" name="state">
-        <option value="activo" {% if user.state == 'activo' %}selected{% endif %}>Activo</option>
-        <option value="inactivo" {% if user.state == 'inactivo' %}selected{% endif %}>Inactivo</option>
+        <option value="activo" {% if user.state=='activo' %}selected{% endif %}>Activo</option>
+        <option value="inactivo" {% if user.state=='inactivo' %}selected{% endif %}>Inactivo</option>
       </select>
     </div>
     <button type="submit" class="btn btn-primary">Update State</button>

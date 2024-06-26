@@ -22,24 +22,24 @@
       </thead>
       <tbody>
         {% if plans %}
-          {% for plan in plans %}
-          <tr>
-            <td>{{ plan.id }}</td>
-            <td>{{ plan.name }}</td>
-            <td>{{ plan.description }}</td>
-            <td>{{ plan.monthly_price }}</td>
-            <td>
-              <a href="{{ url_for('views.update_plan', id=plan.id) }}" class="btn btn-warning">Edit</a>
-              <form action="{{ url_for('views.delete_plan', id=plan.id) }}" method="post" style="display:inline;">
-                <button type="submit" class="btn btn-danger">Delete</button>
-              </form>
-            </td>
-          </tr>
-          {% endfor %}
+        {% for plan in plans %}
+        <tr>
+          <td>{{ plan.id }}</td>
+          <td>{{ plan.name }}</td>
+          <td>{{ plan.description }}</td>
+          <td>{{ plan.monthly_price }}</td>
+          <td>
+            <a href="{{ url_for('views.update_plan', id=plan.id) }}" class="btn btn-warning">Edit</a>
+            <form action="{{ url_for('views.delete_plan', id=plan.id) }}" method="post" style="display:inline;">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
         {% else %}
-          <tr>
-            <td colspan="5" class="text-center">No plans available</td>
-          </tr>
+        <tr>
+          <td colspan="5" class="text-center">No plans available</td>
+        </tr>
         {% endif %}
       </tbody>
     </table>
