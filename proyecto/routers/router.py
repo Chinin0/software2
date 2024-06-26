@@ -1,9 +1,11 @@
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for, send_file, Flask, jsonify, send_from_directory
 import threading
 from datetime import datetime
+
 # importamos los controladores de Usuario
 from ..controllers import UserController, VideoController, AudioController, PresencialController, SuscripcionController
 from ..controllers import PlansController
+
 # importamos los Modelos de usuario
 from ..models.User import User, Plan
 import os
@@ -70,7 +72,7 @@ def home_():
 
     return render_template("home.html")
 
-
+#ruta de login
 @home.route('/login', methods=['GET', 'POST'])
 def login():
     # si el metodo es post, es decir, si se envio el formulario
@@ -111,7 +113,7 @@ def login():
     else:
         return render_template("login.html")
 
-
+#ruta de registro de usuario
 @home.route('/register', methods=['GET', 'POST'])
 def register():
     time_creacion = datetime.now()  # guardamos la fecha y hora en la que se registrará
@@ -129,19 +131,21 @@ def register():
 
     return render_template('register.html')
 
-
+#ruta de dasboard
 @home.route('/dashboard/<int:id>',methods=['GET', 'POST'])
 def dashboard(id):
     if 'Esta_logeado' in session:
         return render_template('dashboard.html', id = id)
     return redirect(url_for('views.login'))
 
+#ruta dashboard administrador
 @home.route('/dashboard_admin')
 def dashboard_admin():
     if 'Esta_logeado' in session:
         return render_template('dashboardAdmin.html')
     return redirect(url_for('views.login'))
 
+#ruta a logaut 
 @home.route('/logout')
 def logout():
     if 'Esta_logeado' in session:  # Si el usuario esta logeado entonces realiza funcionalidades permitidas
@@ -150,7 +154,7 @@ def logout():
         return redirect(url_for('views.home_'))
     return redirect(url_for('views.login'))
 
-
+#ruta principal de planes 
 @home.route('/plans/<int:id>',methods=['GET', 'POST'])
 def plans(id):
     if 'Esta_logeado' in session:  # Si el usuario esta logeado entonces realiza funcionalidades permitidas
@@ -159,6 +163,7 @@ def plans(id):
         return render_template("plans.html", plans=planes, id =id)
     return redirect(url_for('views.login'))
 
+#ruta de los administracion de planes
 @home.route('/admin_plans/')
 def admin_plans():
     if 'Esta_logeado' in session:  # Si el usuario está logeado entonces realiza funcionalidades permitidas
@@ -167,7 +172,7 @@ def admin_plans():
         return render_template("admin_plans.html", plans=planes)
     return redirect(url_for('views.login'))
 
-
+#ruta de creacion de Planes
 @home.route('/admin_plans/create', methods=['GET', 'POST'])
 def create_plan():
     if 'Esta_logeado' in session:
@@ -182,7 +187,7 @@ def create_plan():
         return render_template("create_plan.html")
     return redirect(url_for('views.login'))
 
-
+#ruta de actualizacion de los planes 
 @home.route('/admin_plans/update/<int:id>', methods=['GET', 'POST'])
 def update_plan(id):
     if 'Esta_logeado' in session:
@@ -199,7 +204,7 @@ def update_plan(id):
         return render_template("update_plan.html", plan=plan)
     return redirect(url_for('views.login'))
 
-
+#ruta para para eliminar planes 
 @home.route('/admin_plans/delete/<int:id>', methods=['POST'])
 def delete_plan(id):
     if 'Esta_logeado' in session:
@@ -207,6 +212,7 @@ def delete_plan(id):
         return redirect(url_for('views.admin_plans'))
     return redirect(url_for('views.login'))
 
+#ruta de administracion de Usuarios
 @home.route('/admin_users', methods=['GET', 'POST'])
 def admin_users():
     if 'Esta_logeado' in session:
@@ -214,6 +220,7 @@ def admin_users():
         return render_template('admin_users_index.html', users=users)
     return redirect(url_for('views.login'))
 
+#ruta de adminstrador para actualizar los usuarios
 @home.route('/admin_users/update/<int:id>', methods=['GET', 'POST'])
 def update_user_state(id):
     if 'Esta_logeado' in session:
@@ -229,7 +236,7 @@ def update_user_state(id):
         return render_template("admin_users.html", user=user)
     return redirect(url_for('views.login'))
 
-
+#ruta paara ralizar los pagos de los planes 
 @home.route('/card/<int:id>/<int:plan_id>', methods=['GET', 'POST'])
 def card(id, plan_id):
     return render_template("card.html", id = id, plan_id = plan_id)
