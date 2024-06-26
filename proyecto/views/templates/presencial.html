@@ -16,103 +16,10 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Speech Recognition and Translation</title>
-
-        <style>
-            .btn-record {
-                background-color: red;
-                padding: 1rem;
-                /* 16px */
-                border-radius: 9999px;
-                /* Full rounded */
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 60px;
-                height: 60px;
-            }
-
-            .content-center {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                height: 100%;
-                margin-top: -150px;
-            }
-
-            .bg-red {
-                background-color: red;
-            }
-
-            .bg-green {
-                background-color: #48bb78;
-                /* Green 500 from Tailwind */
-            }
-
-            .right_col {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-            }
-
-            svg {
-                width: 24px;
-                height: 24px;
-            }
-
-            h1 {
-                margin-top: 1rem;
-                /* Space between the button and the text */
-            }
-
-            .text-panel {
-                background-color: white;
-                padding: 1rem;
-                border-radius: 8px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                max-width: 600px;
-                /* Adjust the max-width as needed */
-                max-height: 300px;
-                /* Maximum height for the panel */
-                overflow-y: auto;
-                /* Enable vertical scroll when content exceeds max-height */
-                text-align: left;
-                margin-top: 1rem;
-                /* Space between the h1 and the text panel */
-            }
-
-            .panel-container {
-                display: flex;
-                justify-content: space-around;
-                align-items: flex-start;
-                width: 100%;
-            }
-
-            .contains {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-bottom: 10px;
-            }
-
-            .select-container {
-                display: flex;
-                gap: 20px;
-                /* Espacio entre los selectores */
-            }
-
-            select {
-                margin: 0;
-                /* Elimina cualquier margen predeterminado */
-                padding: 10px;
-                /* Añade espacio interior para mayor comodidad */
-            }
-        </style>
+        <link rel="stylesheet" href="{{url_for('static', filename='build/css/presencial.css')}}">
     </head>
 
     <body>
-
         <div class="text-center content-center">
             <div class="contains">
                 <div class="select-container">
@@ -143,12 +50,6 @@
             </div>
             <h1>Púlse para grabar</h1>
 
-            <!-- <div class="button-container"
-                style="text-align: center; margin: 1rem; display: inline-block; margin: 0 5px;">
-                <button id="startCaptureButton">Start Recognition</button>
-                <button onclick="stopCapture()">Stop Capture</button>
-            </div> -->
-
             <div>
                 <input type="checkbox" id="speakTranslation" />
                 <label for="speakTranslation">Speak Translations</label>
@@ -169,106 +70,6 @@
                     <p id="errorMessage" style="color: red;"></p>
                 </div>
             </div>
-            <script>
-                let captureInterval;
-                let lastPlayedAudio = null;
-                let isRecording = false;
-
-                const startCaptureButton = document.getElementById('startCaptureButton');
-                const micIcon = document.getElementById('micIcon');
-
-                startCaptureButton.addEventListener('click', () => {
-                    isRecording = !isRecording;
-                    if (isRecording) {
-                        startRecording();
-                    } else {
-                        stopRecording();
-                    }
-                });
-
-                function startRecording() {
-                    startCaptureButton.classList.remove('bg-red');
-                    startCaptureButton.classList.add('bg-green');
-                    micIcon.style.fill = "#FFFFFF";
-
-                    var sourceLang = document.getElementById("sourceLang").value;
-                    var targetLang = document.getElementById("targetLang").value;
-                    var speakTranslations = document.getElementById("speakTranslation").checked;
-
-                    fetch('/start_capture', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ sourceLang, targetLang, speakTranslations })
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
-                            captureInterval = setInterval(getTranslations, 5000); // Update every 5 seconds
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
-                }
-
-                function stopRecording() {
-                    startCaptureButton.classList.remove('bg-green');
-                    startCaptureButton.classList.add('bg-red');
-                    micIcon.style.fill = "#000000";
-
-                    clearInterval(captureInterval);
-                    fetch('/stop_capture')
-                        .then(response => response.text())
-                        .then(data => {
-                            console.log(data);
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
-                }
-
-                function getTranslations() {
-                    fetch('/get_translations')
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
-                            if (data.error_message) {
-                                document.getElementById("errorMessage").innerText = data.error_message;
-                            } else {
-                                const recognizedTextsDiv = document.getElementById("recognizedTexts");
-                                const translationTextsDiv = document.getElementById("translationTexts");
-
-                                recognizedTextsDiv.innerHTML = '';
-                                translationTextsDiv.innerHTML = '';
-
-                                data.recognized_texts.forEach(text => {
-                                    const p = document.createElement('p');
-                                    p.innerText = text;
-                                    recognizedTextsDiv.appendChild(p);
-                                });
-
-                                data.translation_texts.forEach(text => {
-                                    const p = document.createElement('p');
-                                    p.innerText = text;
-                                    translationTextsDiv.appendChild(p);
-                                });
-
-                                if (data.audio_path && data.audio_path !== lastPlayedAudio) {
-                                    const audioElement = document.getElementById("translationAudio");
-                                    audioElement.src = `/temporales/${data.audio_path.split('/').pop()}`;
-                                    audioElement.style.display = "block";
-                                    audioElement.play();
-                                    lastPlayedAudio = data.audio_path;  // Actualizar la variable con el último archivo reproducido
-                                }
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
-                }
-
-            </script>
         </div>
     </body>
 
@@ -279,6 +80,106 @@
 {% block javascripts %}
 {{ super()}}
 <!-- Chart.js -->
+
+<script>
+    let captureInterval;
+    let lastPlayedAudio = null;
+    let isRecording = false;
+
+    const startCaptureButton = document.getElementById('startCaptureButton');
+    const micIcon = document.getElementById('micIcon');
+
+    startCaptureButton.addEventListener('click', () => {
+        isRecording = !isRecording;
+        if (isRecording) {
+            startRecording();
+        } else {
+            stopRecording();
+        }
+    });
+
+    function startRecording() {
+        startCaptureButton.classList.remove('bg-red');
+        startCaptureButton.classList.add('bg-green');
+        micIcon.style.fill = "#FFFFFF";
+
+        var sourceLang = document.getElementById("sourceLang").value;
+        var targetLang = document.getElementById("targetLang").value;
+        var speakTranslations = document.getElementById("speakTranslation").checked;
+
+        fetch('/start_capture', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ sourceLang, targetLang, speakTranslations })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                captureInterval = setInterval(getTranslations, 5000); // Update every 5 seconds
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function stopRecording() {
+        startCaptureButton.classList.remove('bg-green');
+        startCaptureButton.classList.add('bg-red');
+        micIcon.style.fill = "#000000";
+
+        clearInterval(captureInterval);
+        fetch('/stop_capture')
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function getTranslations() {
+        fetch('/get_translations')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.error_message) {
+                    document.getElementById("errorMessage").innerText = data.error_message;
+                } else {
+                    const recognizedTextsDiv = document.getElementById("recognizedTexts");
+                    const translationTextsDiv = document.getElementById("translationTexts");
+
+                    recognizedTextsDiv.innerHTML = '';
+                    translationTextsDiv.innerHTML = '';
+
+                    data.recognized_texts.forEach(text => {
+                        const p = document.createElement('p');
+                        p.innerText = text;
+                        recognizedTextsDiv.appendChild(p);
+                    });
+
+                    data.translation_texts.forEach(text => {
+                        const p = document.createElement('p');
+                        p.innerText = text;
+                        translationTextsDiv.appendChild(p);
+                    });
+
+                    if (data.audio_path && data.audio_path !== lastPlayedAudio) {
+                        const audioElement = document.getElementById("translationAudio");
+                        audioElement.src = `/temporales/${data.audio_path.split('/').pop()}`;
+                        audioElement.style.display = "block";
+                        audioElement.play();
+                        lastPlayedAudio = data.audio_path;  // Actualizar la variable con el último archivo reproducido
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
 
 
 {% endblock javascripts %}
