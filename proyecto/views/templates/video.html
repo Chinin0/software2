@@ -58,7 +58,7 @@
             <div class="scrollable-section">
                 <div class="text-center content-center">
                     <div class="upload-button-container">
-                        <form action="/upload-video" method="POST" enctype="multipart/form-data">
+                        <form action="/upload-video/{{id}}" method="POST" enctype="multipart/form-data">
                             <div class="drop-zone" id="dropZone">
                                 <span class="drop-zone-text">Arrastra y suelta tu video aquí o haz clic para
                                     seleccionarlo
@@ -94,7 +94,7 @@
 
                             <button type="submit">Subir Video</button>
 
-                            <a class="video_nuevo" href="/video">Nuevo Video
+                            <a class="video_nuevo" href="/video/{{id}}">Nuevo Video
                             </a>
 
                             <!-- paneles de texto completo -->

@@ -278,8 +278,8 @@ def update_profile():
 def audio(id):
     return render_template("audio.html", id = id, idiomas=IDIOMAS)
 
-@home.route('/upload-audio', methods=['POST'])
-def upload_audio():
+@home.route('/upload-audio/<int:id>', methods=['POST'])
+def upload_audio(id):
     AudioController.limpiar_archivos_temporales()  # Limpiar archivos temporales antes de procesar un nuevo audio
 
     if 'audioFile' not in request.files:
@@ -303,7 +303,7 @@ def upload_audio():
         audio_traduccion = resultado.get('audio_traduccion', '')
         print('Valor de audio_traduccion:', audio_traduccion)
 
-        return render_template('audio.html', idiomas=IDIOMAS, 
+        return render_template('audio.html', id = id, idiomas=IDIOMAS, 
         transcripcion=resultado.get('texto', ''), traduccion=resultado.get('texto_traducido', ''), audio_traduccion=audio_traduccion)
     
     return redirect(request.url)
@@ -328,8 +328,8 @@ def index(id):
     return render_template('video.html', id = id, idiomas=IDIOMAS)
 
 
-@home.route('/upload-video', methods=['POST'])
-def upload_video():
+@home.route('/upload-video/<int:id>', methods=['POST'])
+def upload_video(id):
     VideoController.limpiar_archivos_temporales()  # Limpiar archivos temporales antes de procesar un nuevo video
 
     if 'videoFile' not in request.files:
