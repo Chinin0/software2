@@ -13,188 +13,15 @@
     <html lang="en">
     <!-- cambios de chinin para prueba -->
     <!-- hola jisan -->
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet"> -->
         <title>Video Transcriber and Translator</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
             integrity="sha384-rMzH5hNv9cdL3iJSJCEmyFNE4o3JGt2V6wOrX3gIT7Gj9Wfgvk5tbcG+yUHsOF+k" crossorigin="anonymous">
         <link rel="stylesheet" href="{{url_for('static', filename='build/css/video.css')}}">
-        <style>
-            .scrollable-section {
-                max-height: 600px;
-                overflow-y: auto;
-                padding: 50px;
-                /* Ajusta el padding a un valor razonable */
-                border: 1px solid #ccc;
-                background-color: #f9f9f9;
-                /* Color de fondo ligero para diferenciación */
-            }
-
-            .audioFile {
-                background-color: white;
-            }
-
-            .panel-container {
-                display: flex;
-                justify-content: space-around;
-                align-items: flex-start;
-                width: 100%;
-            }
-
-            .text-panel {
-                background-color: white;
-                padding: 1rem;
-                border-radius: 8px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                max-width: 600px;
-                /* Adjust the max-width as needed */
-                max-height: 300px;
-                /* Maximum height for the panel */
-                overflow-y: auto;
-                /* Enable vertical scroll when content exceeds max-height */
-                text-align: left;
-                margin-top: 1rem;
-                /* Space between the h1 and the text panel */
-            }
-
-            h1 {
-                margin-bottom: 20px;
-            }
-
-            .file-input {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                opacity: 0;
-                cursor: pointer;
-            }
-
-            .audio-preview {
-                margin-top: 60px;
-                display: none;
-                margin-bottom: 10px;
-            }
-
-            audio {
-                max-width: 100%;
-                max-height: 300px;
-                /* Limita la altura del audio */
-                border-radius: 10px;
-                margin-bottom: 10px;
-            }
-
-            button {
-                padding: 10px 20px;
-                background-color: #28a745;
-                color: #fff;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-                margin-top: 0px;
-            }
-            
-            .audio_button{
-                padding: 12px 20px;
-                background-color: #28a745;
-                color: #fff;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-                margin-top: 0px;
-
-            }
-
-            button:hover {
-                background-color: #218838;
-            }
-
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
-                display: flex;
-                /* add this line */
-                justify-content: center;
-                /* add this line */
-                height: 100vh;
-                /* add this line to make the body full height */
-            }
-
-            .drop-zone {
-                border: 2px dashed #007bff;
-                border-radius: 10px;
-                padding: 50px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-                position: relative;
-                max-width: 800px;
-                margin: 0 auto;
-                flex-wrap: nowrap;
-                top: 10px;
-            }
-
-            .drop-zone:hover {
-                background-color: #f0f8ff;
-            }
-
-            .drop-zone-text {
-                color: #007bff;
-                font-size: 18px;
-                display: block;
-                margin: 0;
-                text-justify: auto;
-            }
-
-            .btn-record {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            .btn-record.green {
-                background-color: green;
-            }
-
-            .btn-record.red {
-                background-color: red;
-            }
-
-            svg {
-                fill: gray;
-            }
-
-            .contains {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-bottom: 10px;
-                margin-top: 20px;
-            }
-
-            .select-container {
-                display: flex;
-                gap: 20px;
-                /* Espacio entre los selectores */
-            }
-
-            select {
-                margin: 0;
-                /* Elimina cualquier margen predeterminado */
-                padding: 10px;
-                /* Añade espacio interior para mayor comodidad */
-            }
-        </style>
-
+        <link rel="stylesheet" href="{{url_for('static', filename='build/css/audio.css')}}">
     </head>
 
     <body>
@@ -206,7 +33,8 @@
                             <div class="drop-zone" id="dropZone">
                                 <span class="drop-zone-text">Arrastra y suelta tu Audio aquí o haz clic para
                                     seleccionarlo</span>
-                                <input type="file" id="audioFile" name="audioFile" accept="audio/*" class="file-input" required>
+                                <input type="file" id="audioFile" name="audioFile" accept="audio/*" class="file-input"
+                                    required>
                             </div>
                             <div class="contains">
                                 <div class="select-container">
@@ -231,7 +59,7 @@
 
                             <button type="submit">Subir Audio</button>
                             <a class="audio_button" href="/audio/{{id}}">Nuevo Audio</a>
-                            
+
                         </form>
                         <div class="panel-container">
                             <div class="text-panel">

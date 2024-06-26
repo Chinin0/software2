@@ -21,20 +21,20 @@
       </thead>
       <tbody>
         {% if users %}
-          {% for user in users %}
-          <tr>
-            <td>{{ user.name }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.state }}</td>
-            <td>
-              <a href="{{ url_for('views.update_user_state', id=user.id) }}" class="btn btn-warning">Edit State</a>
-            </td>
-          </tr>
-          {% endfor %}
+        {% for user in users %}
+        <tr>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.state }}</td>
+          <td>
+            <a href="{{ url_for('views.update_user_state', id=user.id) }}" class="btn btn-warning">Edit State</a>
+          </td>
+        </tr>
+        {% endfor %}
         {% else %}
-          <tr>
-            <td colspan="5" class="text-center">No users available</td>
-          </tr>
+        <tr>
+          <td colspan="5" class="text-center">No users available</td>
+        </tr>
         {% endif %}
       </tbody>
     </table>
