@@ -6,7 +6,6 @@
     <title>Compra Business</title>
     <link href="https://fonts.googleapis.com/css?family=Raleway|Rock+Salt|Source+Code+Pro:300,400,600" rel="stylesheet">
     <link rel="stylesheet" href="{{url_for('static', filename='build/css/card.css')}}">
-
 </head>
 
 <body>
@@ -17,21 +16,27 @@
 
     <div class="total-container">
         <div>
-            <b><p>Total <abbr title="the prices shown above don't include any applicable taxes. Subscription automatically renews within 24-hours prior to the end of the current period. To cancel auto-renewai, please contact ................" class="mi-abbr">ⓘ</abbr></p></b>
-            <!-- <b><label for="total" id="labeltotal">Total</label></b>
-            <b><abbr title="the prices shown above don't include any applicable taxes. Subscription automatically renews within 24-hours prior to the end of the current period. To cancel auto-renewai, please contact ................ " class="mi-abbr">ⓘ</abbr></b> -->
+            <b>
+                <p>Total <abbr
+                        title="the prices shown above don't include any applicable taxes. Subscription automatically renews within 24-hours prior to the end of the current period. To cancel auto-renewai, please contact ................"
+                        class="mi-abbr">ⓘ</abbr></p>
+            </b>
         </div>
-        
+
     </div>
 
     <div id="totalcantidad"><b>$119.9</b></div>
 
     <div class="renew">
-        <b><p>Auto renews on Nov 30, 2024</p></b>
+        <b>
+            <p>Auto renews on Nov 30, 2024</p>
+        </b>
     </div>
 
     <div class="USD">
-        <b><p>USD</p></b>
+        <b>
+            <p>USD</p>
+        </b>
     </div>
 
     <div class="container preload">
@@ -164,16 +169,17 @@
         </div>
         <div class="field-container">
             <label for="privacy">
-                <input type="checkbox" name="" id="privacy"> I agree to the <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>.
+                <input type="checkbox" name="" id="privacy"> I agree to the <a href="">Terms of Service</a> and <a
+                    href="">Privacy Policy</a>.
             </label>
-                
+
         </div>
         <div class="field-container">
             <a href="" class="pur">Purchase</a>
         </div>
-        
+
     </div>
-    
+
     <!-- partial -->
     <script src='https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js'></script>
     <script src="{{ url_for('static', filename='build/js/card.js')}}"></script>
