@@ -5,14 +5,16 @@ import threading
 import queue
 import os
 
-recognizer = sr.Recognizer()
-translator = Translator()
 
-voice_queue = queue.Queue()
+recognizer = sr.Recognizer()  # Inicializa el reconocedor de voz
+translator = Translator()  # Inicializa el traductor
+voice_queue = queue.Queue()  # Cola para manejar las traducciones a voz
 
+# Función para obtener los idiomas disponibles
 def get_available_languages():
     return LANGUAGES
 
+# Función que se ejecuta en un hilo separado para procesar la cola de voz
 def voice_worker():
     while True:
         text = voice_queue.get()
@@ -24,13 +26,16 @@ def voice_worker():
         # os.system(f"mpg123 {audio_path}")  # Comentado si no es necesario
         voice_queue.task_done()
 
+# Inicializa y arranca el hilo del trabajador de voz
 voice_thread = threading.Thread(target=voice_worker)
 voice_thread.daemon = True
 voice_thread.start()
 
+# Función para reconocer y traducir el audio
 def recognize_and_translate(source_lang, target_lang, shared_data):
     error_message = None
 
+    # Función interna para capturar audio en un hilo separado
     def capture_audio_thread(shared_data):
         nonlocal error_message
 
@@ -38,12 +43,15 @@ def recognize_and_translate(source_lang, target_lang, shared_data):
             print("Speak now...")
             while shared_data["capture_audio"]:
                 try:
+                    # Captura el audio del micrófono
                     audio = recognizer.listen(source, timeout=5)
 
                     if audio is not None:
+                        # Reconoce el texto en el audio
                         text = recognizer.recognize_google(audio, language=source_lang)
                         shared_data['recognized_texts'].append(text)
 
+                        # Traduce el texto reconocido
                         translation = translator.translate(text, dest=target_lang).text
                         shared_data['translation_texts'].append(translation)
                         print("You said: {}".format(text))
