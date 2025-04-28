@@ -4,15 +4,420 @@
 
 {% block stylesheets %}
 {{ super() }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    :root {
+        --primary-color: #3498db;
+        --secondary-color: #2c3e50;
+        --success-color: #2ecc71;
+        --danger-color: #e74c3c;
+        --warning-color: #f39c12;
+        --light-gray: #f5f5f5;
+        --gray: #95a5a6;
+        --dark-gray: #7f8c8d;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background-color: #f0f2f5;
+    }
+
+    .main-content {
+        padding: 2rem;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background-color: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stat-card h3 {
+        font-size: 1rem;
+        color: var(--dark-gray);
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-card .value {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .stat-card .change {
+        display: flex;
+        align-items: center;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+    }
+
+    .stat-card .change.positive {
+        color: var(--success-color);
+    }
+
+    .stat-card .change.negative {
+        color: var(--danger-color);
+    }
+
+    .tickets-section {
+        background-color: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        overflow-x: auto;
+        /* Para hacer la tabla responsive */
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        /* Para diseño responsive */
+        gap: 15px;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+        transition: background-color 0.2s;
+    }
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+    }
+
+    .tickets-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+        /* Asegura que la tabla tenga un mínimo de ancho */
+    }
+
+    .tickets-table th,
+    .tickets-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--light-gray);
+    }
+
+    .tickets-table th {
+        background-color: #f8f9fa;
+        color: var(--dark-gray);
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+    }
+
+    .tickets-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .status {
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        display: inline-block;
+        /* Mejor comportamiento responsivo */
+    }
+
+    .status-open {
+        background-color: #e1f0ff;
+        color: var(--primary-color);
+    }
+
+    .status-inprogress {
+        background-color: #fff8e1;
+        color: var(--warning-color);
+    }
+
+    .status-closed {
+        background-color: #e8f5e9;
+        color: var(--success-color);
+    }
+
+    .priority {
+        display: flex;
+        align-items: center;
+    }
+
+    .priority i {
+        margin-right: 5px;
+    }
+
+    .priority-high {
+        color: var(--danger-color);
+    }
+
+    .priority-medium {
+        color: var(--warning-color);
+    }
+
+    .priority-low {
+        color: var(--dark-gray);
+    }
+
+    .actions-cell {
+        display: flex;
+        gap: 10px;
+    }
+
+    .actions-cell i {
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .actions-cell i:hover {
+        color: var(--primary-color);
+    }
+
+    .chart-container {
+        background-color: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-top: 2rem;
+        height: 400px;
+    }
+
+    /* Media queries para mejor responsividad */
+    @media (max-width: 768px) {
+        .main-content {
+            padding: 1rem;
+        }
+
+        .stats-container {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
 {% endblock stylesheets %}
 
 {% block content %}
 <div class="right_col" role="main">
+    <div class="plans-container py-8 px-4">
+        <div class="main-content">
+            <h1>Dashboard</h1>
+            <p>Bienvenido de nuevo. Aquí está tu resumen de HelpDesk.</p>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3>Tickets Nuevos</h3>
+                    <div class="value">24</div>
+                    <div class="change positive">
+                        <i class="fas fa-arrow-up"></i> 12% desde ayer
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Tickets Pendientes</h3>
+                    <div class="value">18</div>
+                    <div class="change negative">
+                        <i class="fas fa-arrow-down"></i> 5% desde ayer
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Tickets Resueltos</h3>
+                    <div class="value">32</div>
+                    <div class="change positive">
+                        <i class="fas fa-arrow-up"></i> 8% desde ayer
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Tiempo de Respuesta</h3>
+                    <div class="value">2.4h</div>
+                    <div class="change positive">
+                        <i class="fas fa-arrow-down"></i> 15% desde ayer
+                    </div>
+                </div>
+            </div>
+
+            <div class="tickets-section">
+                <div class="section-header">
+                    <h2 class="section-title">Tickets Recientes</h2>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Nuevo Ticket
+                    </button>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="tickets-table">
+                        <thead>
+                            <tr>
+                                <th>#ID</th>
+                                <th>Asunto</th>
+                                <th>Solicitante</th>
+                                <th>Estado</th>
+                                <th>Prioridad</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#1234</td>
+                                <td>No puedo acceder a mi correo electrónico</td>
+                                <td>Carlos García</td>
+                                <td><span class="status status-open">Abierto</span></td>
+                                <td>
+                                    <div class="priority priority-high">
+                                        <i class="fas fa-exclamation-circle"></i> Alta
+                                    </div>
+                                </td>
+                                <td>27/04/2025</td>
+                                <td class="actions-cell">
+                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-edit"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1233</td>
+                                <td>Solicitud de instalación de software</td>
+                                <td>Ana Martínez</td>
+                                <td><span class="status status-inprogress">En Progreso</span></td>
+                                <td>
+                                    <div class="priority priority-medium">
+                                        <i class="fas fa-exclamation"></i> Media
+                                    </div>
+                                </td>
+                                <td>26/04/2025</td>
+                                <td class="actions-cell">
+                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-edit"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1232</td>
+                                <td>Computadora lenta</td>
+                                <td>Juan Pérez</td>
+                                <td><span class="status status-inprogress">En Progreso</span></td>
+                                <td>
+                                    <div class="priority priority-low">
+                                        <i class="fas fa-circle"></i> Baja
+                                    </div>
+                                </td>
+                                <td>26/04/2025</td>
+                                <td class="actions-cell">
+                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-edit"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1231</td>
+                                <td>Error en sistema de facturación</td>
+                                <td>Laura Torres</td>
+                                <td><span class="status status-closed">Cerrado</span></td>
+                                <td>
+                                    <div class="priority priority-high">
+                                        <i class="fas fa-exclamation-circle"></i> Alta
+                                    </div>
+                                </td>
+                                <td>25/04/2025</td>
+                                <td class="actions-cell">
+                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-edit"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1230</td>
+                                <td>Actualización de permisos de usuario</td>
+                                <td>Miguel Hernández</td>
+                                <td><span class="status status-closed">Cerrado</span></td>
+                                <td>
+                                    <div class="priority priority-medium">
+                                        <i class="fas fa-exclamation"></i> Media
+                                    </div>
+                                </td>
+                                <td>24/04/2025</td>
+                                <td class="actions-cell">
+                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-edit"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="section-title">Estadísticas Mensuales</h2>
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content %}
 
 {% block javascripts %}
-{{ super()}}
-<!-- Chart.js -->
-
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+                datasets: [{
+                    label: 'Tickets Resueltos',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                    borderColor: 'rgba(52, 152, 219, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
 {% endblock javascripts %}

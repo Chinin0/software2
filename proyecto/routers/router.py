@@ -13,6 +13,7 @@ import time
 from werkzeug.utils import secure_filename
 from proyecto.database.connection import _fetch_all,_fecth_lastrow_id,_fetch_none,_fetch_one  #las funciones 
 from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash
 
 # Funciones de la funcionalidad audio
 AudioController.transcribir_y_traducir, AudioController.mostrar_codigos_idiomas, AudioController.limpiar_archivos_temporales, AudioController.TEMP_DIR
@@ -75,40 +76,34 @@ def home_():
 #ruta de login
 @home.route('/login', methods=['GET', 'POST'])
 def login():
-    # si el metodo es post, es decir, si se envio el formulario
     if request.method == 'POST':
-        data = request.form  # guardo todos los datos ingresados por formulario de la vista
-        print('------datos ingresados por formulario-------')
-        usuario = User(0, data['email'], data['password'],0 , 0, 0)  # capturo los datos del formulario y mando al modelo User
-        # los 0 son nulos porque no metemos desde formulario
-
-        logged_user = UserController.login(usuario)
-        print('datos del login')
-        print(logged_user)
-        # si el usuario existe
-        if logged_user != None:
-            if logged_user.password_hash:
-                # guardamos los datos del usuario en la sesion
-                session['Esta_logeado'] = True  # Variable para saber si el usuario esta logeado
-                # obtenemos todo los datos del usuario
-                session['usuario_id'] = logged_user.id
-                session['name'] = logged_user.name
-                session['email'] = logged_user.email
-                session['password'] = logged_user.password_hash
-                session['id_rol'] = logged_user.id_rol
-                session['state'] = logged_user.state
-                session['create_at'] = logged_user.create_at
-                if(logged_user.id_rol == 1):
-                    return redirect(url_for('views.dashboard_admin'))
-                   # return render_template("dashboardAdmin.html")
-                else:
-                    id = UserController.id_user(usuario)[0]
-                    return redirect(url_for('views.dashboard', id = id))  # redirige dashboard que corresponde//////chinin estuvo aquí
+        data = request.form
+        print("=== DATOS DEL FORMULARIO ===")
+        print(f"Email: {data['email']}")
+        print(f"Contraseña (no mostrar en producción): {data['password']}")
+        
+        # Usar la nueva función que maneja directamente email y contraseña
+        logged_user = UserController.verificar_credenciales(data['email'], data['password'])
+        
+        if logged_user:
+            print("Usuario autenticado correctamente")
+            session['Esta_logeado'] = True
+            session['usuario_id'] = logged_user.id
+            session['name'] = logged_user.name
+            session['email'] = logged_user.email
+            session['password'] = logged_user.password_hash
+            session['id_rol'] = logged_user.id_rol
+            session['state'] = logged_user.state
+            session['create_at'] = logged_user.create_at
+            
+            print(f"Sesión creada - ID: {session['usuario_id']}, Rol: {session['id_rol']}")
+            
+            if logged_user.id_rol == 1:
+                return redirect(url_for('views.dashboard_admin'))
             else:
-                flash("Usuario o Contraseña invalida")  # Contraseña invalida
-                return render_template("login.html")
+                return redirect(url_for('views.dashboard', id=logged_user.id))
         else:
-            flash("Usuario o Contraseña invalida")  # Usuario no encontrado
+            flash("Usuario o Contraseña inválida")
             return render_template("login.html")
     else:
         return render_template("login.html")
@@ -116,17 +111,28 @@ def login():
 #ruta de registro de usuario
 @home.route('/register', methods=['GET', 'POST'])
 def register():
-    time_creacion = datetime.now()  # guardamos la fecha y hora en la que se registrará
-    # si el metodo es post, es decir, si se envio el formulario
+    time_creacion = datetime.now()
     if request.method == "POST":
         data = request.form
-        print('------datos ingresados por formulario-------')
-        print(data)
-        usuario = User(data['name'], data['email'], data['password'], data['id_rol'], data['state'], time_creacion)
-        # capturo los datos del formulario y mando al modelo User
-        # los 0 son nulos porque no metemos desde formulario
+        
+        # Validar que todos los campos estén presentes
+        if not all(key in data for key in ['name', 'email', 'password', 'id_rol', 'state']):
+            flash('Todos los campos son requeridos')
+            return render_template('register.html')
+            
+        # Crear el usuario (la contraseña será hasheada en el constructor)
+        usuario = User(
+            name=data['name'], 
+            email=data['email'], 
+            password=data['password'], 
+            id_rol=int(data['id_rol']), 
+            state=data['state'], 
+            create_at=time_creacion
+        )
+        
+        # Crear el usuario en la base de datos
         UserController.create(usuario)
-        flash('Usuario registrado con exito')
+        flash('Usuario registrado con éxito')
         return redirect(url_for('views.login'))
 
     return render_template('register.html')
@@ -469,3 +475,36 @@ if __name__ == '__main__':
     if not os.path.exists(app.config['UPLOAD_TRADUCCION']):
         os.makedirs(app.config['UPLOAD_TRADUCCION'])
     app.run(debug=True)
+    
+@home.route('/api/upload-audio', methods=['POST'])
+def api_upload_audio():
+    AudioController.limpiar_archivos_temporales()  # Limpiar archivos temporales antes de procesar un nuevo audio
+
+    if 'audioFile' not in request.files:
+        print("No se encontró el archivo de audio")
+        return redirect(request.url)
+
+    file = request.files['audioFile']
+    if file.filename == '':
+        print("No se seleccionó ningún archivo")
+        return redirect(request.url)
+
+    print("Forma request:", request.form)
+
+    if file:
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+
+        idioma_entrada = request.form.get('idioma_entrada', '')
+        idioma_salida = request.form.get('idioma_salida', 'es')
+        reproducir_audio = request.form.get('reproducir_audio', 'n') == 's'
+
+        resultado = AudioController.transcribir_y_traducir(filepath, idioma_entrada, idioma_salida, reproducir_audio)
+
+        audio_traduccion = resultado.get('audio_traduccion', '')
+        print('Valor de audio_traduccion:', audio_traduccion)
+
+        return resultado
+
+    return redirect(request.url)

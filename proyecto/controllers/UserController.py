@@ -15,6 +15,9 @@ def update(usuario: User) -> User:
 def login(usuario: User) -> User:
     return usuario_db.login(usuario)
 
+def verificar_credenciales(email, password_plaintext):
+    return usuario_db.verificar_credenciales(email, password_plaintext)
+
 # Actualizar el estado de un usuario
 def update_state(user_data: dict) -> None:
     print("Updating user state:", user_data)

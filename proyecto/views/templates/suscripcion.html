@@ -14,15 +14,24 @@
     <div class="plans-grid">
       <div class="plan-card">
         <div>
-          <h2 class="plan-description">Usuario: {{ data.user }}</h2>
-          <h3 class="plan-name">Plan: {{ data.plan }}</h3>
-          <h2 class="plan-price">State: {{ data.state }}</h2>
-          <h2 class="plan-price">Precio: {{ data.monthly_price }}</h2>
-          <h3 class="text-xl font-semibold">Fecha de compra del Plan: {{ data.fecha.strftime('%Y-%m-%d %H:%M:%S') }}
-          </h3>
-          <div style="text-align: center;">
-            <img class="" src="../static/images/cuenta.jpg" alt="" width="90%">
-          </div>
+          {% if data %}
+            <h2 class="plan-description">Usuario: {{ data.user }}</h2>
+            <h3 class="plan-name">Plan: {{ data.plan }}</h3>
+            <h2 class="plan-price">State: {{ data.state }}</h2>
+            <h2 class="plan-price">Precio: {{ data.monthly_price }}</h2>
+            
+            {% if data.fecha %}
+              <h3 class="text-xl font-semibold">Fecha de compra del Plan: {{ data.fecha.strftime('%Y-%m-%d %H:%M:%S') }}</h3>
+            {% else %}
+              <h3 class="text-xl font-semibold">Fecha de compra del Plan: No disponible</h3>
+            {% endif %}
+            
+            <div style="text-align: center;">
+              <img class="" src="../static/images/cuenta.jpg" alt="" width="90%">
+            </div>
+          {% else %}
+            <h3 class="text-xl font-semibold">No hay información de suscripción disponible</h3>
+          {% endif %}
         </div>
         <div class="plan-details">
           <ul>

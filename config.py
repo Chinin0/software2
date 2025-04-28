@@ -5,7 +5,7 @@ load_dotenv()                                           # Cargar todo el cotenid
 
 #configuración basica que debe tener
 class BaseConfig():
-    SERVER_NAME = "localhost:5000"
+    #SERVER_NAME = "localhost:5000"
     SECRET_KEY = os.environ.get("SECRET_KEY","")        #clave secreta para la proteccion del login
     DEBUG = True
     TEMPLATE_FOLDER = "views/templates"                 # defino las rutas para los archivos de vista 

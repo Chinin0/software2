@@ -32,21 +32,21 @@ class User(db.Model):
     # Relación inversa con la tabla Subscription
     subscriptions = db.relationship('Subscription', backref='user', lazy=True)  # Relación uno a muchos con la tabla Subscription
 
-    def __init__(self, name, email, password, id_rol, state, create_at):
+    def __init__(self, name, email, password, id_rol, state, create_at, is_hashed=False):
         self.name = name
         self.email = email
-        self.password_hash = generate_password_hash(str(password))  # Hash de la contraseña
+        if is_hashed:
+            self.password_hash = password  # Ya viene hasheada
+        else:
+            self.password_hash = generate_password_hash(str(password))  # Si no viene hasheada, la hasheamos
         self.id_rol = id_rol
         self.state = state
         self.create_at = create_at
 
-    # SQL para insertar un usuario de prueba
-    sql2 = "INSERT INTO users (name, email, password, id_rol, state, create_at ) VALUES (%s, %s, %s,%s, %s, %s);"
-    _fetch_none(sql2, ('admin', 'admin@gmail.com', '12345678', 1, 'activo', datetime.now))
-
-    @classmethod  # Decorador para definir un método de clase
-    def check_password(self, hashed_password, password_hash):
-        return check_password_hash(hashed_password, password_hash)  # Verifica el hash de la contraseña
+    @staticmethod
+    def check_password(hashed_password, password_plaintext):
+        return check_password_hash(hashed_password, password_plaintext)
+ # Verifica el hash de la contraseña
 
 # Define la tabla Plan
 class Plan(db.Model):
