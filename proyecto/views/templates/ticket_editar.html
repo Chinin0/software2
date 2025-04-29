@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Editar Ticket{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Editar Ticket</h2>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="card">
+        <div class="card-header">
+            <h5>Ticket #{{ ticket.id }} - {{ ticket.asunto }}</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="asunto" class="form-label">Asunto</label>
+                    <input type="text" class="form-control" id="asunto" name="asunto" value="{{ ticket.asunto }}" readonly>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label">Descripción</label>
+                    <textarea class="form-control" id="descripcion" rows="3" readonly>{{ ticket.descripcion }}</textarea>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="estado" class="form-label">Estado</label>
+                            <select class="form-select" id="estado" name="estado">
+                                <option value="Pendiente" {% if ticket.estado == 'Pendiente' %}selected{% endif %}>Pendiente</option>
+                                <option value="En proceso" {% if ticket.estado == 'En proceso' %}selected{% endif %}>En proceso</option>
+                                <option value="Resuelto" {% if ticket.estado == 'Resuelto' %}selected{% endif %}>Resuelto</option>
+                                <option value="Cerrado" {% if ticket.estado == 'Cerrado' %}selected{% endif %}>Cerrado</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="prioridad" class="form-label">Prioridad</label>
+                            <select class="form-select" id="prioridad" name="prioridad">
+                                <option value="Baja" {% if ticket.prioridad == 'Baja' %}selected{% endif %}>Baja</option>
+                                <option value="Media" {% if ticket.prioridad == 'Media' %}selected{% endif %}>Media</option>
+                                <option value="Alta" {% if ticket.prioridad == 'Alta' %}selected{% endif %}>Alta</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    <a href="{{ url_for('home.ver_ticket', ticket_id=ticket.id) }}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

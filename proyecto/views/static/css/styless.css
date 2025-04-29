@@ -74,3 +74,34 @@
     margin-bottom: 5px;
 }
 
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+header h1 {
+    margin-bottom: 0;
+}
+
+nav a {
+    margin-right: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+.alert.success {
+    color: green;
+}

@@ -1,19 +1,18 @@
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for, send_file, Flask, jsonify, send_from_directory
 import threading
 from datetime import datetime
+from proyecto.database.connection import _fetch_none, _fetch_one, _fetch_all
 
 # importamos los controladores de Usuario
-from ..controllers import UserController, VideoController, AudioController, PresencialController, SuscripcionController
+from ..controllers import UserController, VideoController, AudioController, PresencialController, SuscripcionController, TicketController
 from ..controllers import PlansController
 
 # importamos los Modelos de usuario
 from ..models.User import User, Plan
 import os
-import time
 from werkzeug.utils import secure_filename
 from proyecto.database.connection import _fetch_all,_fecth_lastrow_id,_fetch_none,_fetch_one  #las funciones 
 from werkzeug.security import generate_password_hash
-from werkzeug.security import check_password_hash
 
 # Funciones de la funcionalidad audio
 AudioController.transcribir_y_traducir, AudioController.mostrar_codigos_idiomas, AudioController.limpiar_archivos_temporales, AudioController.TEMP_DIR
@@ -157,6 +156,7 @@ def logout():
     if 'Esta_logeado' in session:  # Si el usuario esta logeado entonces realiza funcionalidades permitidas
         session.pop('Esta_logeado', None)
         session.pop('name', None)
+        session.clear()
         return redirect(url_for('views.home_'))
     return redirect(url_for('views.login'))
 
@@ -508,3 +508,128 @@ def api_upload_audio():
         return resultado
 
     return redirect(request.url)
+
+@home.route('/tickets/<int:id>/nuevo', methods=['GET', 'POST'])
+def crear_ticket(id):
+    if 'Esta_logeado' not in session:
+        return redirect(url_for('views.login'))
+
+    if request.method == 'POST':
+        asunto = request.form['asunto']
+        descripcion = request.form['descripcion']
+        usuario_id = session['usuario_id']
+
+        try:
+            TicketController.crear_ticket(usuario_id, asunto, descripcion)
+            flash('Ticket creado exitosamente.', 'success')
+        except Exception as e:
+            flash(f'Error al crear ticket: {str(e)}', 'error')
+        
+        return redirect(url_for('views.listar_tickets', id=usuario_id))
+
+    return render_template('ticket_nuevo.html', id=id)
+
+
+@home.route('/usuarios/<int:id>/tickets')
+def listar_tickets(id):
+    if 'Esta_logeado' not in session:
+        return redirect(url_for('views.login'))
+
+    usuario_id = session.get('usuario_id')
+    if id != usuario_id:
+        flash("Acceso denegado.", 'error')
+        return redirect(url_for('views.dashboard', id=usuario_id))
+
+    # Prueba simple sin conexión a DB
+    tickets_lista = [{
+        'id': 1,
+        'user_id': usuario_id,
+        'asunto': 'Prueba',
+        'descripcion': 'Ticket de prueba',
+        'estado': 'Pendiente',
+        'prioridad': 'Baja',
+        'fecha_creacion': '2024-04-01'
+    }]
+
+    return redirect(url_for('views.dashboard', id=session['usuario_id']))
+
+
+
+@home.route('/tickets/<int:ticket_id>')
+def ver_ticket(ticket_id):
+    if 'Esta_logeado' not in session:
+        return redirect(url_for('views.login'))
+        
+    try:
+        ticket = TicketController.obtener_ticket_por_id(ticket_id)
+        if not ticket:
+            flash('Ticket no encontrado', 'error')
+            return redirect(url_for('views.dashboard', id=session['usuario_id']))
+        
+        # Convertir el resultado en un diccionario si es necesario
+        if isinstance(ticket, tuple):
+            ticket_dict = {
+                'id': ticket[0],
+                'user_id': ticket[1],
+                'asunto': ticket[2],
+                'descripcion': ticket[3],
+                'estado': ticket[4],
+                'prioridad': ticket[5],
+                'fecha_creacion': ticket[6]
+            }
+        else:
+            ticket_dict = ticket
+            
+        usuario_id = session['usuario_id']
+        return render_template('tickets_ver.html', ticket=ticket_dict, id=usuario_id)
+    except Exception as e:
+        import traceback
+        traceback_str = traceback.format_exc()
+        print(f"Error al ver ticket: {str(e)}\n{traceback_str}")
+        flash(f'Error al visualizar el ticket: {str(e)}', 'error')
+        return redirect(url_for('views.dashboard', id=session['usuario_id']))
+
+
+@home.route('/tickets/<int:ticket_id>/editar', methods=['GET', 'POST'])
+def editar_ticket(ticket_id):
+    if 'Esta_logeado' not in session:
+        return redirect(url_for('views.login'))
+        
+    try:
+        ticket = TicketController.obtener_ticket_por_id(ticket_id)
+        if not ticket:
+            flash('Ticket no encontrado', 'error')
+            return redirect(url_for('views.dashboard', id=session['usuario_id']))
+        
+        # Convertir el resultado en un diccionario si es necesario
+        if isinstance(ticket, tuple):
+            ticket_dict = {
+                'id': ticket[0],
+                'user_id': ticket[1],
+                'asunto': ticket[2],
+                'descripcion': ticket[3],
+                'estado': ticket[4],
+                'prioridad': ticket[5],
+                'fecha_creacion': ticket[6]
+            }
+        else:
+            ticket_dict = ticket
+            
+        usuario_id = session['usuario_id']
+        
+        if request.method == 'POST':
+            estado = request.form['estado']
+            prioridad = request.form.get('prioridad', 'Baja')
+            
+            TicketController.actualizar_ticket(ticket_id, estado, prioridad)
+            
+            flash('Ticket actualizado correctamente', 'success')
+            return redirect(url_for('views.listar_tickets', id=usuario_id))
+            
+        return render_template('tickets_editar.html', ticket=ticket_dict, id=usuario_id)
+    except Exception as e:
+        import traceback
+        traceback_str = traceback.format_exc()
+        print(f"Error al editar ticket: {str(e)}\n{traceback_str}")
+        flash(f'Error al editar el ticket: {str(e)}', 'error')
+        return redirect(url_for('views.dashboard', id=session['usuario_id']))

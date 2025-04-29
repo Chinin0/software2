@@ -86,3 +86,16 @@ class Payment(db.Model):
     payment_date = db.Column(db.DateTime, nullable=False, default=datetime.now)  # Fecha de pago con valor por defecto
     payment_method = db.Column(db.String(50), nullable=False)  # Método de pago, no puede ser nulo
     payment_status = db.Column(db.String(50), nullable=False, default='paid')  # Estado del pago con valor por defecto
+
+
+# Define la tabla Tickets
+class Ticket(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)  # Añadido campo user_id
+    asunto = db.Column(db.String(255), nullable=False)
+    descripcion = db.Column(db.Text, nullable=False)
+    solicitante = db.Column(db.String(100), nullable=True)
+    estado = db.Column(db.String(20), default="Pendiente")
+    prioridad = db.Column(db.String(10), default="Baja")
+    fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
+    

@@ -1,0 +1,62 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Lista de Tickets{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Mis Tickets</h2>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="mb-3">
+        <a href="{{ url_for('home.crear_ticket', id=id) }}" class="btn btn-primary">Crear Nuevo Ticket</a>
+        <a href="{{ url_for('views.dashboard', id=id) }}" class="btn btn-secondary">Volver al Dashboard</a>
+    </div>
+    
+    {% if tickets %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Asunto</th>
+                    <th>Estado</th>
+                    <th>Prioridad</th>
+                    <th>Fecha Creación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                <tr>
+                    <td>{{ ticket.id }}</td>
+                    <td>{{ ticket.asunto }}</td>
+                    <td>
+                        <span class="badge {% if ticket.estado == 'Pendiente' %}bg-warning{% elif ticket.estado == 'En proceso' %}bg-info{% elif ticket.estado == 'Resuelto' %}bg-success{% else %}bg-secondary{% endif %}">
+                            {{ ticket.estado }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge {% if ticket.prioridad == 'Alta' %}bg-danger{% elif ticket.prioridad == 'Media' %}bg-warning{% else %}bg-info{% endif %}">
+                            {{ ticket.prioridad }}
+                        </span>
+                    </td>
+                    <td>{{ ticket.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>
+                        <a href="{{ url_for('home.ver_ticket', ticket_id=ticket.id) }}" class="btn btn-sm btn-info">Ver</a>
+                        <a href="{{ url_for('home.editar_ticket', ticket_id=ticket.id) }}" class="btn btn-sm btn-warning">Editar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">No tienes tickets registrados.</div>
+    {% endif %}
+</div>
+{% endblock %}

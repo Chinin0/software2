@@ -1,0 +1,52 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Ver Ticket{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Detalles del Ticket</h2>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5>Ticket #{{ ticket.id }}</h5>
+            <div>
+                <span class="badge {% if ticket.estado == 'Pendiente' %}bg-warning{% elif ticket.estado == 'En proceso' %}bg-info{% elif ticket.estado == 'Resuelto' %}bg-success{% else %}bg-secondary{% endif %}">
+                    {{ ticket.estado }}
+                </span>
+                <span class="badge {% if ticket.prioridad == 'Alta' %}bg-danger{% elif ticket.prioridad == 'Media' %}bg-warning{% else %}bg-info{% endif %}">
+                    Prioridad: {{ ticket.prioridad }}
+                </span>
+            </div>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ ticket.asunto }}</h5>
+            <p class="card-text">{{ ticket.descripcion }}</p>
+            
+            <hr>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Fecha de creación:</strong> 
+                    {% if ticket.fecha_creacion is string %}
+                        {{ ticket.fecha_creacion }}
+                    {% else %}
+                        {{ ticket.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="{{ url_for('home.editar_ticket', ticket_id=ticket.id) }}" class="btn btn-warning">Editar</a>
+            <a href="{{ url_for('home.listar_tickets', id=id) }}" class="btn btn-secondary">Volver a la lista</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
