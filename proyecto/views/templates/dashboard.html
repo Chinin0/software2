@@ -277,9 +277,10 @@
             <div class="tickets-section">
                 <div class="section-header">
                     <h2 class="section-title">Tickets Recientes</h2>
-                    <button class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Nuevo Ticket
-                    </button>
+                    <div class="text-right">
+                        <a href="/tickets/{{ id }}/nuevo" class="btn btn-success"><i class="fa fa-plus"></i> Nuevo
+                            Ticket</a>
+                    </div>
                 </div>
 
                 <div style="overflow-x: auto;">
@@ -399,11 +400,11 @@
                                         {% elif ticket.prioridad == 'Baja' %}priority-low
                                         {% endif %}">
                                         {% if ticket.prioridad == 'Alta' %}
-                                            <i class="fas fa-exclamation-circle"></i>
+                                        <i class="fas fa-exclamation-circle"></i>
                                         {% elif ticket.prioridad == 'Media' %}
-                                            <i class="fas fa-exclamation"></i>
+                                        <i class="fas fa-exclamation"></i>
                                         {% else %}
-                                            <i class="fas fa-circle"></i>
+                                        <i class="fas fa-circle"></i>
                                         {% endif %}
                                         {{ ticket.prioridad }}
                                     </div>

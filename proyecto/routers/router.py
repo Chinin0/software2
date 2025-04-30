@@ -25,6 +25,10 @@ VideoController.convertir_video_a_wav, VideoController.transcribir_y_traducir, V
 # Funciones de la funcionalidad Presencial
 PresencialController.recognize_and_translate, PresencialController.get_available_languages, PresencialController.voice_queue
 
+# Funciones de la funcionalidad Offline
+from ..controllers.offline_controller import transcribir_audio_offline, traducir_offline
+from ..controllers.offline_controller import VOSK_MODEL_PATH, UPLOAD_FOLDER
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
@@ -645,3 +649,76 @@ def editar_ticket(ticket_id):
         print(f"Error al editar ticket: {str(e)}\n{traceback_str}")
         flash(f'Error al editar el ticket: {str(e)}', 'error')
         return redirect(url_for('views.dashboard', id=session['usuario_id']))
+    
+    
+    
+@home.route('/offline', methods=['GET', 'POST'])
+def modo_offline():
+    if request.method == 'POST':
+        print("Procesando solicitud POST")
+        
+        # Verificar que se subió un archivo
+        if 'archivo' not in request.files:
+            print("No hay archivo en la solicitud")
+            return render_template('offline.html', error="No se seleccionó ningún archivo")
+            
+        archivo = request.files['archivo']
+        
+        # Verificar que el archivo tiene nombre
+        if archivo.filename == '':
+            print("Nombre de archivo vacío")
+            return render_template('offline.html', error="No se seleccionó ningún archivo")
+            
+        print(f"Archivo recibido: {archivo.filename}")
+        
+        # Verificar que el archivo es wav
+        if not archivo.filename.lower().endswith('.wav'):
+            print("El archivo no es WAV")
+            return render_template('offline.html', error="Por favor, sube un archivo de audio en formato WAV")
+        
+        idioma_origen = request.form.get('idioma_origen', 'es')
+        idioma_destino = request.form.get('idioma_destino', 'en')
+        
+        print(f"Idiomas: origen={idioma_origen}, destino={idioma_destino}")
+
+        # Obtener la carpeta de uploads desde la configuración
+        upload_folder = app.config.get('UPLOAD_FOLDER')
+        if not upload_folder:
+            print("UPLOAD_FOLDER no está configurado en app.config")
+            upload_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'uploads')
+            app.config['UPLOAD_FOLDER'] = upload_folder
+            print(f"Se ha configurado UPLOAD_FOLDER como: {upload_folder}")
+        
+        # Crear carpeta de uploads si no existe
+        os.makedirs(upload_folder, exist_ok=True)
+        print(f"Directorio de uploads: {upload_folder}")
+        
+        # Guardar el archivo
+        filename = archivo.filename
+        path = os.path.join(upload_folder, filename)
+        print(f"Guardando archivo en: {path}")
+        archivo.save(path)
+        
+        if not os.path.exists(path):
+            print(f"¡Error! El archivo no se guardó correctamente en {path}")
+            return render_template('offline.html', error=f"Error al guardar el archivo")
+
+        try:
+            # Procesamiento
+            print("Iniciando transcripción...")
+            texto_original = transcribir_audio_offline(filename)
+            print(f"Texto transcrito: {texto_original}")
+            
+            print("Iniciando traducción...")
+            texto_traducido = traducir_offline(texto_original, idioma_origen, idioma_destino)
+            print(f"Texto traducido: {texto_traducido}")
+
+            return render_template('offline.html',
+                                   texto_original=texto_original,
+                                   texto_traducido=texto_traducido)
+        except Exception as e:
+            print(f"Error durante el procesamiento: {str(e)}")
+            # Manejo de errores
+            return render_template('offline.html', error=f"Error: {str(e)}")
+
+    return render_template('offline.html')
