@@ -164,3 +164,12 @@ Revertir cambios de los archivos realizado
 
 `git checkout --`
 
+ACTUALIZAR LA BASE DE DATOS
+borrar la carpeta migrations arriba del proyecto,
+luego flask db init
+ir a pgAdmin, Schemas/public/Tables/alembic_version. 
+hacer clic derecho en alembic_version, view/Edit Data > All Row
+cuando muestre el unico dato con un valor hay que seleccionarlo, darle borrar y darle guardar. luego refrescar la base de datos
+luego:
+flask db migrate -m "crear todas las tablas"
+flask db upgrade

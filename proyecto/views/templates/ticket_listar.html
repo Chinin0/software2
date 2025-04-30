@@ -1,62 +1,82 @@
-{% extends 'base/base.html' %}
-
-{% block title %}Lista de Tickets{% endblock %}
+{% extends "base/base.html" %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Mis Tickets</h2>
-    
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-    
-    <div class="mb-3">
-        <a href="{{ url_for('home.crear_ticket', id=id) }}" class="btn btn-primary">Crear Nuevo Ticket</a>
-        <a href="{{ url_for('views.dashboard', id=id) }}" class="btn btn-secondary">Volver al Dashboard</a>
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Mis Tickets de Soporte</h3>
+      </div>
     </div>
-    
-    {% if tickets %}
-        <table class="table table-striped">
-            <thead>
+
+    <div class="clearfix"></div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Lista de Tickets</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            {% if tickets %}
+            <table class="table table-striped">
+              <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Asunto</th>
-                    <th>Estado</th>
-                    <th>Prioridad</th>
-                    <th>Fecha Creación</th>
-                    <th>Acciones</th>
+                  <th>#</th>
+                  <th>Asunto</th>
+                  <th>Estado</th>
+                  <th>Prioridad</th>
+                  <th>Fecha Creación</th>
+                  <th>Acciones</th>
                 </tr>
-            </thead>
-            <tbody>
+              </thead>
+              <tbody>
                 {% for ticket in tickets %}
                 <tr>
-                    <td>{{ ticket.id }}</td>
-                    <td>{{ ticket.asunto }}</td>
-                    <td>
-                        <span class="badge {% if ticket.estado == 'Pendiente' %}bg-warning{% elif ticket.estado == 'En proceso' %}bg-info{% elif ticket.estado == 'Resuelto' %}bg-success{% else %}bg-secondary{% endif %}">
-                            {{ ticket.estado }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="badge {% if ticket.prioridad == 'Alta' %}bg-danger{% elif ticket.prioridad == 'Media' %}bg-warning{% else %}bg-info{% endif %}">
-                            {{ ticket.prioridad }}
-                        </span>
-                    </td>
-                    <td>{{ ticket.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</td>
-                    <td>
-                        <a href="{{ url_for('home.ver_ticket', ticket_id=ticket.id) }}" class="btn btn-sm btn-info">Ver</a>
-                        <a href="{{ url_for('home.editar_ticket', ticket_id=ticket.id) }}" class="btn btn-sm btn-warning">Editar</a>
-                    </td>
+                  <td>{{ ticket.id }}</td>
+                  <td>{{ ticket.asunto }}</td>
+                  <td>
+                    {% if ticket.estado == 'Pendiente' %}
+                    <span class="label label-warning">{{ ticket.estado }}</span>
+                    {% elif ticket.estado == 'En proceso' %}
+                    <span class="label label-primary">{{ ticket.estado }}</span>
+                    {% elif ticket.estado == 'Resuelto' %}
+                    <span class="label label-success">{{ ticket.estado }}</span>
+                    {% else %}
+                    <span class="label label-default">{{ ticket.estado }}</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if ticket.prioridad == 'Alta' %}
+                    <span class="label label-danger">{{ ticket.prioridad }}</span>
+                    {% elif ticket.prioridad == 'Media' %}
+                    <span class="label label-warning">{{ ticket.prioridad }}</span>
+                    {% else %}
+                    <span class="label label-info">{{ ticket.prioridad }}</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ ticket.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</td>
+                  <td>
+                    <a href="/tickets/{{ ticket.id }}/ver" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> Ver</a>
+                    <a href="/tickets/{{ ticket.id }}/editar" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Editar</a>
+                  </td>
                 </tr>
                 {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <div class="alert alert-info">No tienes tickets registrados.</div>
-    {% endif %}
+              </tbody>
+            </table>
+            {% else %}
+            <div class="alert alert-info">
+              <p>No tienes tickets registrados aún. <a href="/tickets/{{ id }}/nuevo" class="alert-link">Crear un nuevo ticket</a>.</p>
+            </div>
+            {% endif %}
+            <div class="text-right">
+              <a href="/tickets/{{ id }}/nuevo" class="btn btn-success"><i class="fa fa-plus"></i> Nuevo Ticket</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -295,7 +295,7 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <!-- <tbody>
                             <tr>
                                 <td>#1234</td>
                                 <td>No puedo acceder a mi correo electrónico</td>
@@ -376,6 +376,49 @@
                                     <i class="fas fa-edit"></i>
                                 </td>
                             </tr>
+                        </tbody> -->
+                        <tbody>
+                            {% for ticket in tickets %}
+                            <tr>
+                                <td>#{{ ticket.id }}</td>
+                                <td>{{ ticket.asunto }}</td>
+                                <td>{{ ticket.solicitante }}</td>
+                                <td>
+                                    <span class="status 
+                                        {% if ticket.estado == 'Abierto' %}status-open
+                                        {% elif ticket.estado == 'En Progreso' %}status-inprogress
+                                        {% elif ticket.estado == 'Cerrado' %}status-closed
+                                        {% endif %}">
+                                        {{ ticket.estado }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="priority 
+                                        {% if ticket.prioridad == 'Alta' %}priority-high
+                                        {% elif ticket.prioridad == 'Media' %}priority-medium
+                                        {% elif ticket.prioridad == 'Baja' %}priority-low
+                                        {% endif %}">
+                                        {% if ticket.prioridad == 'Alta' %}
+                                            <i class="fas fa-exclamation-circle"></i>
+                                        {% elif ticket.prioridad == 'Media' %}
+                                            <i class="fas fa-exclamation"></i>
+                                        {% else %}
+                                            <i class="fas fa-circle"></i>
+                                        {% endif %}
+                                        {{ ticket.prioridad }}
+                                    </div>
+                                </td>
+                                <td>{{ ticket.fecha_creacion.strftime('%d/%m/%Y') }}</td>
+                                <td class="actions-cell">
+                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-edit"></i>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="7" style="text-align:center;">No hay tickets registrados.</td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

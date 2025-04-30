@@ -3,9 +3,11 @@ import threading
 from datetime import datetime
 from proyecto.database.connection import _fetch_none, _fetch_one, _fetch_all
 
+
 # importamos los controladores de Usuario
 from ..controllers import UserController, VideoController, AudioController, PresencialController, SuscripcionController, TicketController
 from ..controllers import PlansController
+from proyecto.controllers.TicketController import obtener_tickets_por_usuario
 
 # importamos los Modelos de usuario
 from ..models.User import User, Plan
@@ -52,25 +54,34 @@ home = Blueprint("views", __name__)
 # funciones decoradas, (para que puedan ser usadas en otro archivo)
 @home.route('/', methods=['GET'])
 def home_():
-    """
-    Cargar Usuario Admin
-    """
-    user = User(name="admin", email="admin@gmail.com",password = generate_password_hash("12345678"), id_rol = 1, state= "activo", create_at= datetime.now() )
+    user = User(
+        name="admin", 
+        email="admin@gmail.com", 
+        password="12345678", 
+        id_rol=1, 
+        state="activo", 
+        create_at=datetime.now(),
+        )
     if User.query.filter_by(email=user.email).first():
         print("Usuario Admin ya esta registrado")
-        flash('Usuario Admin ya esta registrado', 'danger')
-        
-    else:   
+    else:
+        # Crear roles
         sql = "INSERT INTO roles (id, rol) VALUES (%s, %s);"
         _fetch_none(sql, (1, 'Administrador'))
         _fetch_none(sql, (2, 'Usuario'))
+
+        # Crear planes
         sql2 = "INSERT INTO plans (id, name, description, monthly_price) VALUES (%s, %s, %s, %s)"
-        _fetch_none(sql2,(1,'Basico', 'Este plan es el mas basico', 70))
-        _fetch_none(sql2,(2,'Intermedio', 'Este plan es el mas Intermedio', 120))
-        _fetch_none(sql2,(3,'Profesional', 'Este plan es el mas Profesional', 150))
+        _fetch_none(sql2, (1, 'Basico', 'Este plan es el mas basico', 70))
+        _fetch_none(sql2, (2, 'Intermedio', 'Este plan es el mas Intermedio', 120))
+        _fetch_none(sql2, (3, 'Profesional', 'Este plan es el mas Profesional', 150))
+
+        # Crear usuario
         UserController.create(user)
 
     return render_template("home.html")
+
+
 
 #ruta de login
 @home.route('/login', methods=['GET', 'POST'])
@@ -140,7 +151,8 @@ def register():
 @home.route('/dashboard/<int:id>',methods=['GET', 'POST'])
 def dashboard(id):
     if 'Esta_logeado' in session:
-        return render_template('dashboard.html', id = id)
+        tickets = TicketController.obtener_tickets_por_usuario(id)  # lista de diccionarios con los tickets
+        return render_template('dashboard.html', tickets=tickets, id = id)
     return redirect(url_for('views.login'))
 
 #ruta dashboard administrador
@@ -513,11 +525,11 @@ def api_upload_audio():
 def crear_ticket(id):
     if 'Esta_logeado' not in session:
         return redirect(url_for('views.login'))
+    usuario_id = session['usuario_id']
 
     if request.method == 'POST':
         asunto = request.form['asunto']
         descripcion = request.form['descripcion']
-        usuario_id = session['usuario_id']
 
         try:
             TicketController.crear_ticket(usuario_id, asunto, descripcion)
@@ -532,26 +544,26 @@ def crear_ticket(id):
 
 @home.route('/usuarios/<int:id>/tickets')
 def listar_tickets(id):
+    # Verifica si hay sesión iniciada
     if 'Esta_logeado' not in session:
+        flash('Debes iniciar sesión para ver los tickets.', 'danger')
         return redirect(url_for('views.login'))
 
     usuario_id = session.get('usuario_id')
-    if id != usuario_id:
-        flash("Acceso denegado.", 'error')
+    id_rol = session.get('id_rol')  # 1 = admin
+
+    # Permitir solo si es el dueño de los tickets o si es admin
+    if usuario_id != id and id_rol != 1:
+        flash('No tienes permiso para ver estos tickets.', 'danger')
         return redirect(url_for('views.dashboard', id=usuario_id))
 
-    # Prueba simple sin conexión a DB
-    tickets_lista = [{
-        'id': 1,
-        'user_id': usuario_id,
-        'asunto': 'Prueba',
-        'descripcion': 'Ticket de prueba',
-        'estado': 'Pendiente',
-        'prioridad': 'Baja',
-        'fecha_creacion': '2024-04-01'
-    }]
+    try:
+        tickets = TicketController.obtener_tickets_por_usuario(id)
+        return render_template('ticket_listar.html', tickets=tickets, id=id)
+    except Exception as e:
+        flash(f'Error al obtener los tickets: {str(e)}', 'danger')
+        return redirect(url_for('views.dashboard', id=usuario_id))
 
-    return redirect(url_for('views.dashboard', id=session['usuario_id']))
 
 
 

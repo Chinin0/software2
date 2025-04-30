@@ -28,7 +28,7 @@ class User(db.Model):
     state = db.Column(db.String(255), nullable=False)  # Columna state, no puede ser nula
     create_at = db.Column(db.DateTime, default=datetime.now)  # Fecha de creación con valor por defecto
     update_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)  # Fecha de actualización con valor por defecto
-    
+    tickets = db.relationship('Ticket', backref='usuario', lazy=True)
     # Relación inversa con la tabla Subscription
     subscriptions = db.relationship('Subscription', backref='user', lazy=True)  # Relación uno a muchos con la tabla Subscription
 
@@ -90,8 +90,9 @@ class Payment(db.Model):
 
 # Define la tabla Tickets
 class Ticket(db.Model):
+    __tablename__ = 'tickets'  # Nombre de la tabla en la base de datos
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)  # Añadido campo user_id
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Añadido campo user_id
     asunto = db.Column(db.String(255), nullable=False)
     descripcion = db.Column(db.Text, nullable=False)
     solicitante = db.Column(db.String(100), nullable=True)
