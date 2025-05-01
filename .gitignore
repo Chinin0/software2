@@ -3,6 +3,6 @@ env
 .env
 migrations
 temporales
-uploads
+uploads/
 archivostemporales
 models/
