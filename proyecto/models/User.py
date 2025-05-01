@@ -6,7 +6,7 @@ from proyecto.database.connection import _fetch_all,_fecth_lastrow_id,_fetch_non
 
 db = SQLAlchemy(app)  # Crea una instancia de SQLAlchemy
 
-# Define la tabla Roles
+# Define la tabla Roles.
 class Roles(db.Model):
     __tablename__ = 'roles'  # Nombre de la tabla en la base de datos
     id = db.Column(db.Integer, primary_key=True)  # Columna id como clave primaria
