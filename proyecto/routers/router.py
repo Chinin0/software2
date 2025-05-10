@@ -525,6 +525,13 @@ def api_upload_audio():
 
     return redirect(request.url)
 
+
+@home.route('/faq/<int:id>')
+def faq(id):
+    if 'Esta_logeado' in session:
+        return render_template('faq.html', id=id)
+    return redirect(url_for('views.login'))
+
 @home.route('/tickets/<int:id>/nuevo', methods=['GET', 'POST'])
 def crear_ticket(id):
     if 'Esta_logeado' not in session:
@@ -652,29 +659,30 @@ def editar_ticket(ticket_id):
     
     
     
-@home.route('/offline', methods=['GET', 'POST'])
-def modo_offline():
+@home.route('/offline/<int:id>', methods=['GET', 'POST'])
+def modo_offline(id):
+    usuario_id = session['usuario_id']
     if request.method == 'POST':
         print("Procesando solicitud POST")
         
         # Verificar que se subió un archivo
         if 'archivo' not in request.files:
             print("No hay archivo en la solicitud")
-            return render_template('offline.html', error="No se seleccionó ningún archivo")
+            return render_template('offline.html', id=usuario_id, error="No se seleccionó ningún archivo")
             
         archivo = request.files['archivo']
         
         # Verificar que el archivo tiene nombre
         if archivo.filename == '':
             print("Nombre de archivo vacío")
-            return render_template('offline.html', error="No se seleccionó ningún archivo")
+            return render_template('offline.html', id=usuario_id, error="No se seleccionó ningún archivo")
             
         print(f"Archivo recibido: {archivo.filename}")
         
         # Verificar que el archivo es wav
         if not archivo.filename.lower().endswith('.wav'):
             print("El archivo no es WAV")
-            return render_template('offline.html', error="Por favor, sube un archivo de audio en formato WAV")
+            return render_template('offline.html', id=usuario_id, error="Por favor, sube un archivo de audio en formato WAV")
         
         idioma_origen = request.form.get('idioma_origen', 'es')
         idioma_destino = request.form.get('idioma_destino', 'en')
@@ -701,7 +709,7 @@ def modo_offline():
         
         if not os.path.exists(path):
             print(f"¡Error! El archivo no se guardó correctamente en {path}")
-            return render_template('offline.html', error=f"Error al guardar el archivo")
+            return render_template('offline.html', id=usuario_id, error=f"Error al guardar el archivo")
 
         try:
             # Procesamiento
@@ -714,11 +722,12 @@ def modo_offline():
             print(f"Texto traducido: {texto_traducido}")
 
             return render_template('offline.html',
+                                   id=id,
                                    texto_original=texto_original,
                                    texto_traducido=texto_traducido)
         except Exception as e:
             print(f"Error durante el procesamiento: {str(e)}")
             # Manejo de errores
-            return render_template('offline.html', error=f"Error: {str(e)}")
+            return render_template('offline.html', id=usuario_id, error=f"Error: {str(e)}")
 
-    return render_template('offline.html')
+    return render_template('offline.html', id=usuario_id)

@@ -283,8 +283,8 @@
                     </div>
                 </div>
 
-                <div style="overflow-x: auto;">
-                    <table class="tickets-table">
+                <div style="max-height: 200px; overflow-y: auto; overflow-x: auto; border: 1px solid #ccc;">
+                    <table class="tickets-table" style="width: 100%; border-collapse: collapse;">
                         <thead>
                             <tr>
                                 <th>#ID</th>
@@ -414,6 +414,87 @@
                                     <i class="fas fa-eye"></i>
                                     <i class="fas fa-edit"></i>
                                 </td>
+
+                            <tr>
+                                <td>#1234</td>
+                                <td>No puedo acceder a mi correo electrónico</td>
+                                <td>Carlos García</td>
+                                <td><span class="status status-open">Abierto</span></td>
+                                <td>
+                                    <div class="priority priority-high">
+                                        <i class="fas fa-exclamation-circle"></i> Alta
+                                    </div>
+                                </td>
+                                <td>27/04/2025</td>
+                                <td class="actions-cell">
+                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-edit"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1233</td>
+                                <td>Solicitud de instalación de software</td>
+                                <td>Ana Martínez</td>
+                                <td><span class="status status-inprogress">En Progreso</span></td>
+                                <td>
+                                    <div class="priority priority-medium">
+                                        <i class="fas fa-exclamation"></i> Media
+                                    </div>
+                                </td>
+                                <td>26/04/2025</td>
+                                <td class="actions-cell">
+                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-edit"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1232</td>
+                                <td>Computadora lenta</td>
+                                <td>Juan Pérez</td>
+                                <td><span class="status status-inprogress">En Progreso</span></td>
+                                <td>
+                                    <div class="priority priority-low">
+                                        <i class="fas fa-circle"></i> Baja
+                                    </div>
+                                </td>
+                                <td>26/04/2025</td>
+                                <td class="actions-cell">
+                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-edit"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1231</td>
+                                <td>Error en sistema de facturación</td>
+                                <td>Laura Torres</td>
+                                <td><span class="status status-closed">Cerrado</span></td>
+                                <td>
+                                    <div class="priority priority-high">
+                                        <i class="fas fa-exclamation-circle"></i> Alta
+                                    </div>
+                                </td>
+                                <td>25/04/2025</td>
+                                <td class="actions-cell">
+                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-edit"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1230</td>
+                                <td>Actualización de permisos de usuario</td>
+                                <td>Miguel Hernández</td>
+                                <td><span class="status status-closed">Cerrado</span></td>
+                                <td>
+                                    <div class="priority priority-medium">
+                                        <i class="fas fa-exclamation"></i> Media
+                                    </div>
+                                </td>
+                                <td>24/04/2025</td>
+                                <td class="actions-cell">
+                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-edit"></i>
+                                </td>
+                            </tr>
                             </tr>
                             {% else %}
                             <tr>
@@ -431,6 +512,64 @@
             </div>
         </div>
     </div>
+    <footer style="background: #f5f5f5; color: #000000; padding: 40px 20px; margin-top: 50px;">
+        <div
+            style="max-width: 1200px; margin: auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+
+            <!-- Empresa -->
+            <div>
+                <h3 style="color: #0dcaf0;">TranscriptoAI</h3>
+                <p>Sistema de transcripción y traducción de audio/video en múltiples idiomas. Ideal para profesionales,
+                    estudiantes y creadores de contenido.</p>
+                <p>Modo Offline incluido, con funciones inteligentes y accesibles.</p>
+            </div>
+
+            <!-- Contacto -->
+            <div>
+                <h4>Contacto</h4>
+                <p><strong>Correo:</strong> soporte@transcriptoai.com</p>
+                <p><strong>WhatsApp:</strong> +591 70012345</p>
+                <p><strong>Teléfono:</strong> +591 3 4567890</p>
+                <p><strong>Dirección:</strong> Calle Ejemplo #123, Santa Cruz, Bolivia</p>
+            </div>
+
+            <!-- Redes sociales -->
+            <div>
+                <h4>Síguenos</h4>
+                <p><a href="https://wa.me/59170012345" target="_blank" style="color: #0dcaf0;">WhatsApp</a></p>
+                <p><a href="https://www.tiktok.com/@transcriptoai" target="_blank" style="color: #0dcaf0;">TikTok</a>
+                </p>
+                <p><a href="https://facebook.com/transcriptoai" target="_blank" style="color: #0dcaf0;">Facebook</a></p>
+                <p><a href="https://instagram.com/transcriptoai" target="_blank" style="color: #0dcaf0;">Instagram</a>
+                </p>
+                <p><a href="https://www.linkedin.com/company/transcriptoai" target="_blank"
+                        style="color: #0dcaf0;">LinkedIn</a>
+                </p>
+            </div>
+
+            <!-- Preguntas Frecuentes -->
+            <div>
+                <h4>
+                    Preguntas Frecuentes
+                </h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li><strong>¿Cómo funciona la transcripción?</strong> Puedes subir archivos de audio o video y el
+                        sistema los
+                        transcribe automáticamente.</li>
+                    <li><strong>¿Puedo traducir los textos?</strong> Sí, contamos con traducción automática a múltiples
+                        idiomas.
+                    </li>
+                    <li><strong>¿Funciona sin internet?</strong> El modo offline permite usar funciones básicas como
+                        transcripción y
+                        guardado local.</li>
+                    <li><strong>¿Quién puede ver mis archivos?</strong> Solo usuarios autorizados según el rol y los
+                        permisos
+                        asignados.</li>
+                </ul>
+            </div>
+
+        </div>
+    </footer>
 </div>
 {% endblock content %}
 

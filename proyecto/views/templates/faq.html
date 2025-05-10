@@ -1,0 +1,113 @@
+{% extends "base/base.html" %}
+
+{% block title %}Preguntas Frecuentes{% endblock title %}
+
+{% block stylesheets %}
+{{ super() }}
+<style>
+    .faq-container {
+        max-width: 900px;
+        margin: auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .faq-title {
+        font-size: 2rem;
+        color: #007BFF;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .faq-item {
+        border-bottom: 1px solid #ddd;
+        padding: 15px 0;
+    }
+
+    .faq-question {
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #333;
+        font-size: 1.1rem;
+    }
+
+    .faq-answer {
+        display: none;
+        margin-top: 10px;
+        color: #555;
+        transition: all 0.3s ease;
+    }
+
+    .faq-question::after {
+        content: "+";
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .faq-item.open .faq-answer {
+        display: block;
+    }
+
+    .faq-item.open .faq-question::after {
+        content: "-";
+    }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="right_col" role="main">
+    <div class="faq-container">
+        <h1 class="faq-title">Preguntas Frecuentes (FAQ)</h1>
+
+        {% set faqs = [
+        ('¿Qué roles existen en el sistema?', 'Existen roles como Administrador, Transcriptor, Traductor y Usuario. Cada
+        uno tiene permisos distintos, como gestionar usuarios, transcribir audios, o realizar traducciones.'),
+        ('¿Cómo subo un archivo para transcripción?', 'Debes ingresar a tu panel, hacer clic en "Subir archivo",
+        seleccionar el archivo de audio o video, y luego hacer clic en "Generar transcripción".'),
+        ('¿Puedo traducir automáticamente una transcripción?', 'Sí, una vez generada la transcripción puedes usar la
+        opción "Traducir" y seleccionar el idioma de destino.'),
+        ('¿El sistema funciona sin conexión?', 'Sí. En modo offline puedes transcribir archivos locales y guardar el
+        contenido. La traducción automática requiere conexión a internet.'),
+        ('¿Qué formatos de archivo son compatibles?', 'Se admiten formatos comunes como MP3, MP4, WAV, AVI y OGG.'),
+        ('¿Dónde se almacenan mis archivos?', 'Tus archivos se almacenan de forma segura en el servidor. Solo tú o
+        usuarios con permisos pueden acceder a ellos.'),
+        ('¿Cómo se protegen mis datos?', 'Aplicamos políticas de privacidad y cifrado para asegurar que tus datos estén
+        protegidos en todo momento.'),
+        ('¿Qué pasa si tengo errores en la transcripción?', 'Puedes editar manualmente la transcripción y reportar
+        errores usando el módulo de ayuda o soporte.'),
+        ('¿Qué idiomas están disponibles para traducción?', 'Actualmente soportamos inglés, español, francés, alemán,
+        portugués y más. Estamos agregando nuevos idiomas constantemente.'),
+        ('¿Puedo exportar la transcripción?', 'Sí, puedes exportar a formatos como TXT, DOCX o PDF desde la vista de
+        resultados.'),
+        ('¿Cómo obtengo soporte técnico?', 'Desde el menú de tu cuenta, haz clic en "Soporte" o escribe a
+        soporte@miapp.com. También puedes consultar estas preguntas frecuentes.'),
+        ('¿El sistema es compatible con todos los navegadores?', 'Funciona en Chrome, Firefox, Edge y Safari. Se
+        recomienda una versión actualizada para mejor rendimiento.')
+        ] %}
+
+        {% for pregunta, respuesta in faqs %}
+        <div class="faq-item">
+            <div class="faq-question">{{ pregunta }}</div>
+            <div class="faq-answer">{{ respuesta }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+{{ super() }}
+<script>
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+            const item = question.parentElement;
+            item.classList.toggle('open');
+        });
+    });
+</script>
+{% endblock javascripts %}
